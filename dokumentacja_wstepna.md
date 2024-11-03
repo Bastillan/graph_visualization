@@ -24,8 +24,8 @@ Aplikacja będzie opierała się na dwóch głównych komponentach:
 
 ### Podproblemy
 - Aby zapewnić wydajność przetwarzania grafów, część za to odpowiedzialna zostanie zaimplementowana w `C++`
-- Aby umożliwić użytkownikom rozszerzenie działania aplikacji za pomocą wtyczek implementujących dodatkowe algorytmy rozłożenia grafu w przestrzeni, zostanie zdefiniowane API implementowane przez wtyczki.
-- Zostanie zdefiniowane API umożliwiające rozszerzenie aplikacji o dodatkowe formaty grafów
+- Zostanie zdefiniowane API umożliwiające rozszerzenie aplikacji za pomocą wtyczek implementujących obsługę algorytmów rozłożenia
+- Zostanie zdefiniowane API umożliwiające rozszerzenie aplikacji za pomocą wtyczek implementujących obsługę dodatkowych formatów plików
 - Wtyczki będą dynamicznie ładowanymi bibliotekami (Windows: *.dll*; Linux: *.so*)
 - Przenośność kodu obsługi wtyczek zostanie zapewniona przy pomocy biblioteki `Boost.DLL`
 - Wizualizacja zostanie zrealizowana w `Pythonie` ze względu na wygodę tworzenia aplikacji oraz brak wymagających obliczeń
