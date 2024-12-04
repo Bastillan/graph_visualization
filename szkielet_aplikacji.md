@@ -1,6 +1,4 @@
 # Szkielet aplikacji
-## Przykładowy program
-
 ## Instrukcja
 ### Budowanie
 #### C++
