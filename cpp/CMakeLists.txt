@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.23)
-project(calculations)
+project(graph_viewer)
 
-set(PYBIND_FINDPYTHON ON)
-find_package(pybind11 REQUIRED)
-find_package(Boost REQUIRED)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-pybind11_add_module(calculations src/math.cpp)
-target_link_libraries(calculations PUBLIC boost::boost)
+add_compile_options(-Wall -Wextra -pedantic -Werror)
 
-set_target_properties(calculations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../../../python)
+add_subdirectory(lib)
