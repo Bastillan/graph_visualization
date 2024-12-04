@@ -8,4 +8,4 @@ add_executable(unit_tests tests.cpp)
 
 target_link_libraries(unit_tests PRIVATE calculations_core Catch2::Catch2WithMain)
 
-add_test(NAME runAllUnitTest COMMAND unit_tests)
+add_test(NAME runAllUnitTests COMMAND unit_tests)
