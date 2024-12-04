@@ -13,7 +13,7 @@ add_library(plugin SHARED plugin.cpp)
 target_link_libraries(plugin PRIVATE Boost::boost)
 
 target_link_libraries(calculations_core PRIVATE Boost::boost)
-
+target_link_libraries(main_app PRIVATE Boost::filesystem Boost::system)
 pybind11_add_module(calculations math_py.cpp)
 target_link_libraries(calculations PRIVATE calculations_core)
 
