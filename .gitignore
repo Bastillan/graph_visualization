@@ -267,4 +267,8 @@ pyrightconfig.json
 .history
 .ionide
 
+### Doxygen ###
+html
+latex
+
 # End of https://www.toptal.com/developers/gitignore/api/c++,python,conan,visualstudiocode,cmake
