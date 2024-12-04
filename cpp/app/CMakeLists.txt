@@ -5,11 +5,12 @@ find_package(pybind11 REQUIRED)
 find_package(Boost REQUIRED)
 
 add_executable(main_app PluginManager.cpp)
-target_link_libraries(main_app PRIVATE Boost)
+target_link_libraries(main_app PRIVATE Boost::boost)
 
 add_library(calculations_core STATIC math.cpp)
 
 add_library(plugin SHARED plugin.cpp)
+target_link_libraries(plugin PRIVATE Boost::boost)
 
 target_link_libraries(calculations_core PRIVATE Boost::boost)
 

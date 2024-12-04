@@ -1,6 +1,6 @@
 #include <iostream>
 #include <boost/config.hpp> // for BOOST_SYMBOL_EXPORT
-#include "pluginInterface.hpp"
+#include "PluginInterface.hpp"
 
 namespace my_namespace {
 
