@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_compile_options(-Wall -Wextra -pedantic -Werror)
 
-add_subdirectory(lib)
+add_subdirectory(app)
