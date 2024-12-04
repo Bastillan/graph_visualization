@@ -1,6 +1,6 @@
 #include <boost/dll/import.hpp> // for import_alias
 #include <iostream>
-#include "../tutorial_common/my_plugin_api.hpp"
+#include "PluginInterface.hpp"
 
 namespace dll = boost::dll;
 
