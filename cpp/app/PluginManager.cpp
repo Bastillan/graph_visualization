@@ -16,6 +16,6 @@ int main(int argc, char* argv[]) {
 
         std::shared_ptr<my_plugin_api> plugin(create_plugin());
 
-        std::cout << "plugin->calculate(1.5, 1.5) call:  " << plugin->calculate(1.5, 1.5) << std::endl;
+        std::cout << "plugin->calculate(1.5, 1.5) call:  " << plugin->y(1, 1, 1) << std::endl;
     }
 }

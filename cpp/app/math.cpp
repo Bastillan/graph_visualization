@@ -8,7 +8,9 @@
  * @copyright Copyright (c) 2024
  * 
  */
-
+#include <boost/dll/import.hpp>
+#include <memory>
+#include "PluginInterface.hpp"
 #include "math.hpp"
 
 /**
@@ -35,5 +37,13 @@ float divide(float arg1, float arg2) {
 }
 
 float y(float x, float a, float b) {
-    return a * x + b;
+    boost::dll::fs::path plugin_path = "../cpp/app/plugins/libplugin.so";
+
+    boost::dll::shared_library lib(plugin_path);             // argv[1] contains path to directory with our plugin library
+
+    auto create_plugin = lib.get<my_plugin_api*()>("create_plugin");
+
+    std::shared_ptr<my_plugin_api> plugin(create_plugin());
+
+    return plugin->y(x, a, b);
 }

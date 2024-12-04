@@ -6,21 +6,17 @@ namespace my_namespace {
 
 class my_plugin_sum : public my_plugin_api {
 public:
-    my_plugin_sum() {
-        std::cout << "Constructing my_plugin_sum" << std::endl;
-    }
+    my_plugin_sum() {}
 
     std::string name() const {
         return "sum";
     }
 
-    float calculate(float x, float y) {
-        return x + y;
+    float y(float x, float a, float b) {
+        return a * x + b;
     }
 
-    ~my_plugin_sum() {
-        std::cout << "Destructing my_plugin_sum ;o)" << std::endl;
-    }
+    ~my_plugin_sum() {}
 };
 
 // Exporting `my_namespace::plugin` variable with alias name `plugin`

@@ -1,5 +1,6 @@
 project(calculations)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(PYBIND_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 find_package(Boost REQUIRED)
@@ -12,9 +13,11 @@ add_library(calculations_core STATIC math.cpp)
 add_library(plugin SHARED plugin.cpp)
 target_link_libraries(plugin PRIVATE Boost::boost)
 
-target_link_libraries(calculations_core PRIVATE Boost::boost)
+target_link_libraries(calculations_core PRIVATE Boost::filesystem Boost::system)
 target_link_libraries(main_app PRIVATE Boost::filesystem Boost::system)
+
 pybind11_add_module(calculations math_py.cpp)
 target_link_libraries(calculations PRIVATE calculations_core)
 
 set_target_properties(calculations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../python)
+set_target_properties(plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/app/plugins)
