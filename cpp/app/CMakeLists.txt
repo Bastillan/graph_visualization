@@ -13,7 +13,7 @@ add_library(graphs_core STATIC math.cpp GraphManager.cpp)
 add_library(plugin SHARED plugin.cpp)
 target_link_libraries(plugin PRIVATE Boost::boost)
 
-target_link_libraries(graphs_core PRIVATE Boost::filesystem Boost::system  Boost::graph)
+target_link_libraries(graphs_core PRIVATE Boost::filesystem Boost::system Boost::graph)
 target_link_libraries(main_app PRIVATE Boost::filesystem Boost::system)
 
 pybind11_add_module(graphs math_py.cpp GraphManager_py.cpp)
