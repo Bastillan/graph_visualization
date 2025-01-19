@@ -25,7 +25,10 @@
  * @param arg2
  * @return float
  */
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS>;
+
+using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
+
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
 bool graph() {
     return true;
@@ -40,8 +43,10 @@ int load_graph(std::string path) {
     }
 
     // Wczytaj graf z pliku GraphML
-    boost::dynamic_properties dp;
+    
     try {
+        boost::dynamic_properties dp;
+        dp.property("description", get(boost::vertex_name, g));
         boost::read_graphml(file, g, dp);
     } catch (const std::exception &e) {
         std::cerr << "Błąd podczas wczytywania grafu: " << e.what() << std::endl;
@@ -52,6 +57,16 @@ int load_graph(std::string path) {
     std::cout << "Liczba wierzchołków: " << boost::num_vertices(g) << std::endl;
     std::cout << "Liczba krawędzi: " << boost::num_edges(g) << std::endl;
 
+    auto vertex_name_map = get(boost::vertex_name, g);
+    for (auto [vi, vi_end] = vertices(g); vi != vi_end; ++vi) {
+        std::cout << "Vertex " << *vi << ": description = " << vertex_name_map[*vi] << std::endl;
+    }
+
     return 0;
 }
+
+
+//To do
+//- dane w load graph
+//- calculate positions
 
