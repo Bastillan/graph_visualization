@@ -35,7 +35,7 @@ bool graph() {
     return true;
 }
 
-int load_graph(std::string path) {
+int load_graph(std::string path, std::string choosed_plugin_path) {
     Graph g;
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -55,7 +55,7 @@ int load_graph(std::string path) {
     }
 
     // Wyświetlenie liczby wierzchołków i krawędzi
-    boost::dll::fs::path plugin_path = "../cpp/app/plugins/libplugin.so";
+    boost::dll::fs::path plugin_path = choosed_plugin_path;
 
     boost::dll::shared_library lib(plugin_path);             // argv[1] contains path to directory with our plugin library
 

@@ -4,6 +4,6 @@
 #define GRAPH_H
 
 bool graph();
-int load_graph(std::string path);
+int load_graph(std::string path, std::string plugin_path);
 
 #endif
