@@ -15,6 +15,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "PluginInterface.hpp"
 #include "math.hpp"
 
@@ -49,9 +50,30 @@ int load_graph(std::string path) {
     }
 
     // Wyświetlenie liczby wierzchołków i krawędzi
-    std::cout << "Liczba wierzchołków: " << boost::num_vertices(g) << std::endl;
-    std::cout << "Liczba krawędzi: " << boost::num_edges(g) << std::endl;
+    boost::dll::fs::path plugin_path = "../cpp/app/plugins/libplugin.so";
 
+    boost::dll::shared_library lib(plugin_path);             // argv[1] contains path to directory with our plugin library
+
+    auto create_plugin = lib.get<my_plugin_api*()>("create_plugin");
+
+    std::shared_ptr<my_plugin_api> plugin(create_plugin());
+    auto coordinates = plugin->calculate_graph_coordinates(g);
+    for (const auto& entry : coordinates) {
+        int key = entry.first;  // Klucz
+        const std::vector<std::pair<double, double>>& vec = entry.second;  // Wartość (wektor par)
+
+        std::cout << "Klucz: " << key << std::endl;
+
+        // Odczytujemy pary (double, double) w wektorze
+        for (const auto& pair : vec) {
+            double x = pair.first;  // Pierwsza liczba w parze (double)
+            double y = pair.second; // Druga liczba w parze (double)
+
+            std::cout << "  Para: (" << x << ", " << y << ")" << std::endl;
+        }
+    }
+
+    // return plugin->y(x, a, b);
     return 0;
 }
 

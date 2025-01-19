@@ -1,28 +1,51 @@
 #include <iostream>
 #include <boost/config.hpp> // for BOOST_SYMBOL_EXPORT
+#include <boost/graph/graphml.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <vector>
+#include <map>
 #include "PluginInterface.hpp"
+
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS>;
 
 namespace my_namespace {
 
-class my_plugin_sum : public my_plugin_api {
-public:
-    my_plugin_sum() {}
+    class graph_calculate : public my_plugin_api {
+    public:
+        graph_calculate() {}
 
-    std::string name() const {
-        return "sum";
+        std::string name() const {
+            return "Graph calculations";
+        }
+
+        float y(float x, float a, float b) {
+            return a * x + b;
+        }
+
+        std::map<int, std::vector<std::pair<double, double>>> calculate_graph_coordinates(Graph graph) {
+            using namespace boost;
+            size_t num_vertices = boost::num_vertices(graph);
+            int size = sqrt(num_vertices) + 1;
+            std::map<int, std::vector<std::pair<double, double>>> coordinates;
+            // std::vector<std::pair<double, double>> coordinates(num_vertices, {0.0, 0.0});
+
+            int i = 0;
+            auto [v_begin, v_end] = vertices(graph);
+            for (auto v_it = v_begin; v_it != v_end; ++v_it) {
+                coordinates[i].push_back(std::make_pair(i % size, i / size));
+                ++i;
+            }
+
+            return coordinates;
+        }
+
+        ~graph_calculate() {}
+    };
+
+    // Exporting `my_namespace::plugin` variable with alias name `plugin`
+    // (Has the same effect as `BOOST_DLL_ALIAS(my_namespace::plugin, plugin)`)
+    extern "C" BOOST_SYMBOL_EXPORT my_plugin_api* create_plugin() {
+        return new graph_calculate();
     }
 
-    float y(float x, float a, float b) {
-        return a * x + b;
-    }
-
-    ~my_plugin_sum() {}
-};
-
-// Exporting `my_namespace::plugin` variable with alias name `plugin`
-// (Has the same effect as `BOOST_DLL_ALIAS(my_namespace::plugin, plugin)`)
-extern "C" BOOST_SYMBOL_EXPORT my_plugin_api* create_plugin() {
-    return new my_plugin_sum();
-}
-
-} // namespace my_namespace 
+} // namespace my_namespace
