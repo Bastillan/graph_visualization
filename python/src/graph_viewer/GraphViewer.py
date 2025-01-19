@@ -18,6 +18,7 @@ class GraphViewer():
         self.vertices_coordinates = []
         self.edges=[]
         self.graph = []
+        self.marked_vertcies = []
 
         self.window = tk.Tk()
         self.window.title("Graph viewer")
@@ -47,6 +48,9 @@ class GraphViewer():
         self.canva.grid(column=0, row=1, columnspan=5)
 
         self.mouse_position = (0, 0)
+        self.canva.bind("<Button-1>", self.start_mark)
+        self.canva.bind("<B1-Motion>", self.mark)
+        self.canva.bind("<ButtonRelease-1>", self.end_mark)
         self.canva.bind("<Button-2>", self.start_move)
         self.canva.bind("<B2-Motion>", self.move)
         self.canva.bind("<MouseWheel>", self.on_scroll)
@@ -94,10 +98,8 @@ class GraphViewer():
         if event.delta != 0:
             if event.delta > 0:
                 self.scale += 10
-                print("zoom_in")
             else:
                 self.scale -= 10
-                print("zoom_out")
         else:
             if event.num == 4:
                 self.zoom_in()
@@ -114,6 +116,30 @@ class GraphViewer():
         self.coordinates = (self.temp_coordinates[0]+x_move, self.temp_coordinates[1]+y_move)
         self.draw()
 
+    def start_mark(self, event):
+        self.temp_coordinates = (event.x, event.y)
+        self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
+
+    def mark(self, event):
+        self.draw()
+        self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
+
+    def end_mark(self, event):
+        self.marked_vertcies = []
+        for vertice in self.vertices_coordinates:
+            x = self.vertices_coordinates[vertice][0] * self.scale
+            y = self.vertices_coordinates[vertice][1] * self.scale
+            xs = self.coordinates[0] + (x-self.vertice_size/2)
+            xe = self.coordinates[0] + (x+self.vertice_size/2)
+            ys = self.coordinates[1] + (y-self.vertice_size/2)
+            ye = self.coordinates[1] + (y+self.vertice_size/2)
+            xms = self.temp_coordinates[0]
+            yms = self.temp_coordinates[1]
+
+            if xs > xms and xe < event.x and ys > yms and ye < event.y:
+                self.marked_vertcies.append(vertice)
+        self.draw()
+
     def draw(self):
         self.canva.delete("all")
         for edge in self.edges:
@@ -121,7 +147,6 @@ class GraphViewer():
             edge_end = self.vertices_coordinates.get(edge[1])
             edge_start = (edge_start[0]*self.scale, edge_start[1]*self.scale)
             edge_end = (edge_end[0]*self.scale, edge_end[1]*self.scale)
-            print(edge_start, edge_end)
             self.draw_line(edge_start, edge_end)
 
         for vertice in self.vertices_coordinates:
@@ -129,11 +154,11 @@ class GraphViewer():
             text = self.vertices[vertice]
             x = x * self.scale
             y = y * self.scale
-            self.draw_circle(x, y)
+            if vertice not in self.marked_vertcies:
+                self.draw_circle(x, y)
+            else:
+                self.draw_circle(x, y, True)
             self.write_text(x, y, text)
-
-        for vertice in self.vertices:
-            print(self.vertices[vertice])
 
     def draw_line(self, start, end):
         xs = self.coordinates[0] + start[0]
@@ -143,12 +168,15 @@ class GraphViewer():
 
         self.canva.create_line(xs, ys, xe, ye, fill=self.edge_color, width=self.edge_width)
 
-    def draw_circle(self, x, y):
+    def draw_circle(self, x, y, alternative_color=False):
         xs = self.coordinates[0] + (x-self.vertice_size/2)
         xe = self.coordinates[0] + (x+self.vertice_size/2)
         ys = self.coordinates[1] + (y-self.vertice_size/2)
         ye = self.coordinates[1] + (y+self.vertice_size/2)
-        self.canva.create_oval(xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color)
+        if alternative_color:
+            self.canva.create_oval(xs, ys, xe, ye, fill="purple", outline="purple")
+        else:
+            self.canva.create_oval(xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color)
 
     def write_text(self, x, y, text):
         x = self.coordinates[0] + x
