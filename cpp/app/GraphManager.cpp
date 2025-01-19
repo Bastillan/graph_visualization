@@ -32,7 +32,7 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
-std::unordered_map<int, std::string> getGraphData(const Graph& g) {
+std::unordered_map<int, std::string> getVerticesData(const Graph& g) {
     std::unordered_map<int, std::string> data;
 
     auto vertex_name_map = get(boost::vertex_name, g);
@@ -41,6 +41,17 @@ std::unordered_map<int, std::string> getGraphData(const Graph& g) {
     }
 
     return data;
+}
+
+std::vector<std::pair<int, int>> getEdges(const Graph& g) {
+    std::vector<std::pair<int, int>> edges_list;
+
+    for (auto [ei, ei_end] = edges(g); ei != ei_end; ++ei) {
+        int source = boost::source(*ei, g);
+        int target = boost::target(*ei, g);
+        edges_list.emplace_back(source, target);
+    }
+    return edges_list;
 }
 
 std::unordered_map<int, std::pair<double, double>> calculateLayout(const Graph& g, std::string plugin_path) {
