@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from calculations import *
+from graphs import *
 
 class GraphViewer():
     def __init__(self):
@@ -45,6 +45,7 @@ class GraphViewer():
 
     def open_graph(self):
         self.graph_path = filedialog.askopenfilename(title="Choose graph")
+        self.graph = load_graph(self.graph_path)
 
     def create_new_graph(self):
         new_graph_path = filedialog.asksaveasfilename(title="Enter new graph name")
