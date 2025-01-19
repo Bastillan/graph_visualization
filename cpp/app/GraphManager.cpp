@@ -32,7 +32,7 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
-std::unordered_map<int, std::string> getGraphData(Graph& g) {
+std::unordered_map<int, std::string> getGraphData(const Graph& g) {
     std::unordered_map<int, std::string> data;
 
     auto vertex_name_map = get(boost::vertex_name, g);
