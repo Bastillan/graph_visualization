@@ -15,6 +15,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <unordered_map>
 #include "PluginInterface.hpp"
 #include "math.hpp"
 
@@ -30,8 +31,15 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
-bool graph() {
-    return true;
+std::unordered_map<int, std::string> getGraphData(const Graph& g) {
+    std::unordered_map<int, std::string> data;
+
+    auto vertex_name_map = get(boost::vertex_name, g);
+    for (auto [vi, vi_end] = vertices(g); vi != vi_end; ++vi) {
+        data[*vi] = vertex_name_map[*vi];
+    }
+
+    return data;
 }
 
 int load_graph(std::string path) {
@@ -64,6 +72,7 @@ int load_graph(std::string path) {
 
     return 0;
 }
+
 
 
 //To do
