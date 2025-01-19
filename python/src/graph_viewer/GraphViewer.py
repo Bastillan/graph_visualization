@@ -4,8 +4,16 @@ from graphs import *
 
 class GraphViewer():
     def __init__(self):
-        self.plugin_path=""
-        self.start_coordinates = (10, 390)
+        self.plugin_path="../cpp/app/plugins/libplugin.so"
+        self.canva_size = (1000, 700)
+        self.start_coordinates = (100, self.canva_size[1]-100)
+        self.vertice_size = 60
+        self.edge_width = 2
+        self.scale = 200
+        self.vertices = []
+        self.vertices_coordinates = []
+        self.edges=[]
+        self.graph = []
 
         self.window = tk.Tk()
         self.window.title("Graph viewer")
@@ -31,8 +39,9 @@ class GraphViewer():
         self.zoom_in_button.grid(column=3, row=0)
         self.zoom_out_button = tk.Button(self.window, text="-")
         self.zoom_out_button.grid(column=4, row=0)
-        self.canva = tk.Canvas(self.window, width=400, height=400, bg="white")
+        self.canva = tk.Canvas(self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white")
         self.canva.grid(column=0, row=1, columnspan=5)
+
 
     def start(self):
         self.window.mainloop()
@@ -40,12 +49,14 @@ class GraphViewer():
     def load_plugin(self):
         self.plugin_path = filedialog.askopenfilename(
         title="Choose plugin",
-        # filetypes=[("Pliki tekstowe", "*.txt"), ("Wszystkie pliki", "*.*")]
         )
 
     def open_graph(self):
         self.graph_path = filedialog.askopenfilename(title="Choose graph")
         self.graph = loadGraph(self.graph_path)
+        self.vertices = self.graph.getGraphData()
+        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.draw()
 
     def create_new_graph(self):
         new_graph_path = filedialog.asksaveasfilename(title="Enter new graph name")
@@ -56,3 +67,18 @@ class GraphViewer():
                 self.graph_path = new_graph_path
             except Exception as e:
                 print(f"Error: {e}")
+
+    def draw(self):
+        # print(self.vertices_coordinates)
+        for vertice_coordinate in self.vertices_coordinates:
+            x, y = self.vertices_coordinates[vertice_coordinate]
+            x = x * self.scale
+            y = y * self.scale
+            self.draw_circle(x, y)
+
+    def draw_circle(self, x, y):
+        x_s = self.start_coordinates[0] + (x-self.vertice_size/2)
+        x_e = self.start_coordinates[0] + (x+self.vertice_size/2)
+        y_s = self.start_coordinates[1] - (y-self.vertice_size/2)
+        y_e = self.start_coordinates[1] - (y+self.vertice_size/2)
+        self.canva.create_oval(x_s, y_s, x_e, y_e, fill="blue")
