@@ -1,7 +1,7 @@
 project(graphs)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(PYBIND_FINDPYTHON ON)
+set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 find_package(Boost REQUIRED)
 

@@ -32,7 +32,7 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
-std::unordered_map<int, std::string> getGraphData(const Graph& g) {
+std::unordered_map<int, std::string> getGraphData(Graph& g) {
     std::unordered_map<int, std::string> data;
 
     auto vertex_name_map = get(boost::vertex_name, g);
@@ -43,7 +43,24 @@ std::unordered_map<int, std::string> getGraphData(const Graph& g) {
     return data;
 }
 
-int load_graph(std::string path) {
+std::unordered_map<int, std::pair<double, double>> calculateLayout(const Graph& g, std::string plugin_path) {
+    
+    //boost::dll::fs::path plugin_path = "../cpp/app/plugins/libplugin.so";
+    boost::dll::fs::path plug_path = plugin_path;
+
+
+    boost::dll::shared_library lib(plug_path);             // argv[1] contains path to directory with our plugin library
+
+    auto create_plugin = lib.get<my_plugin_api*()>("create_plugin");
+
+    std::shared_ptr<my_plugin_api> plugin(create_plugin());
+    auto coordinates = plugin->calculate_graph_coordinates(g);
+    
+
+    return coordinates;
+}
+
+Graph loadGraph(std::string path) {
     Graph g;
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -63,35 +80,14 @@ int load_graph(std::string path) {
     }
 
     // Wyświetlenie liczby wierzchołków i krawędzi
-    boost::dll::fs::path plugin_path = "../cpp/app/plugins/libplugin.so";
-
-    boost::dll::shared_library lib(plugin_path);             // argv[1] contains path to directory with our plugin library
-
-    auto create_plugin = lib.get<my_plugin_api*()>("create_plugin");
-
-    std::shared_ptr<my_plugin_api> plugin(create_plugin());
-    auto coordinates = plugin->calculate_graph_coordinates(g);
-    for (const auto& entry : coordinates) {
-        int key = entry.first;  // Klucz
-        const std::vector<std::pair<double, double>>& vec = entry.second;  // Wartość (wektor par)
-
-        std::cout << "Klucz: " << key << std::endl;
-
-        // Odczytujemy pary (double, double) w wektorze
-        for (const auto& pair : vec) {
-            double x = pair.first;  // Pierwsza liczba w parze (double)
-            double y = pair.second; // Druga liczba w parze (double)
-
-            std::cout << "  Para: (" << x << ", " << y << ")" << std::endl;
-        }
-    }
+    
 
     auto vertex_name_map = get(boost::vertex_name, g);
     for (auto [vi, vi_end] = vertices(g); vi != vi_end; ++vi) {
         std::cout << "Vertex " << *vi << ": name = " << vertex_name_map[*vi] << std::endl;
     }
 
-    return 0;
+    return g;
 }
 
 

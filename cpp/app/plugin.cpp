@@ -3,10 +3,11 @@
 #include <boost/graph/graphml.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include "PluginInterface.hpp"
 
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS>;
+using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
+using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
 namespace my_namespace {
 
@@ -22,17 +23,17 @@ namespace my_namespace {
             return a * x + b;
         }
 
-        std::map<int, std::vector<std::pair<double, double>>> calculate_graph_coordinates(Graph graph) {
+        std::unordered_map<int, std::pair<double, double>> calculate_graph_coordinates(Graph graph) {
             using namespace boost;
             size_t num_vertices = boost::num_vertices(graph);
             int size = sqrt(num_vertices) + 1;
-            std::map<int, std::vector<std::pair<double, double>>> coordinates;
+            std::unordered_map<int, std::pair<double, double>> coordinates;
             // std::vector<std::pair<double, double>> coordinates(num_vertices, {0.0, 0.0});
 
             int i = 0;
             auto [v_begin, v_end] = vertices(graph);
             for (auto v_it = v_begin; v_it != v_end; ++v_it) {
-                coordinates[i].push_back(std::make_pair(i % size, i / size));
+                coordinates[i] = (std::make_pair(i % size, i / size));
                 ++i;
             }
 
