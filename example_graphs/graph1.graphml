@@ -3,18 +3,43 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
      http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+
+  <key id="name" for="node" attr.name="name" attr.type="string"/>
+
   <graph id="G" edgedefault="directed">
-    <node id="n0"/>
-    <node id="n1"/>
-    <node id="n2"/>
-    <node id="n3"/>
-    <node id="n4"/>
-    <node id="n5"/>
-    <node id="n6"/>
-    <node id="n7"/>
-    <node id="n8"/>
-    <node id="n9"/>
-    <node id="n10"/>
+    <node id="n0">
+      <data key="name">Node n0</data>
+    </node>
+    <node id="n1">
+      <data key="name">Node n0</data>
+    </node>
+    <node id="n2">
+      <data key="name">Node n2</data>
+    </node>
+    <node id="n3">
+      <data key="name">Node n3</data>
+    </node>
+    <node id="n4">
+      <data key="name">Node n4</data>
+    </node>
+    <node id="n5">
+      <data key="name">Node n5</data>
+    </node>
+    <node id="n6">
+      <data key="name">Node n6</data>
+    </node>
+    <node id="n7">
+      <data key="name">Node n7</data>
+    </node>
+    <node id="n8">
+      <data key="name">Node n8</data>
+    </node>
+    <node id="n9">
+      <data key="name">Node n9</data>
+    </node>
+    <node id="n10">
+      <data key="name">Node n10</data>
+    </node>
     <edge source="n0" target="n2"/>
     <edge source="n1" target="n2"/>
     <edge source="n2" target="n3"/>
