@@ -65,17 +65,10 @@ int load_graph(std::string path) {
     auto coordinates = plugin->calculate_graph_coordinates(g);
     for (const auto& entry : coordinates) {
         int key = entry.first;  // Klucz
-        const std::vector<std::pair<double, double>>& vec = entry.second;  // Wartość (wektor par)
+        double x = entry.second.first;  // Pierwsza wartość pary
+        double y = entry.second.second; // Druga wartość pary
 
-        std::cout << "Klucz: " << key << std::endl;
-
-        // Odczytujemy pary (double, double) w wektorze
-        for (const auto& pair : vec) {
-            double x = pair.first;  // Pierwsza liczba w parze (double)
-            double y = pair.second; // Druga liczba w parze (double)
-
-            std::cout << "  Para: (" << x << ", " << y << ")" << std::endl;
-        }
+        std::cout << "Key: " << key << ", Value: (" << x << ", " << y << ")" << std::endl;
     }
 
     auto vertex_name_map = get(boost::vertex_name, g);
