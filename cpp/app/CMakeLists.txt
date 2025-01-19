@@ -17,7 +17,7 @@ target_link_libraries(graphs_core PRIVATE Boost::filesystem Boost::system Boost:
 target_link_libraries(main_app PRIVATE Boost::filesystem Boost::system)
 
 pybind11_add_module(graphs math_py.cpp GraphManager_py.cpp)
-target_link_libraries(graphs PRIVATE graphs_core)
+target_link_libraries(graphs PRIVATE graphs_core Boost::system Boost::graph)
 
 set_target_properties(graphs PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../python)
 set_target_properties(plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/app/plugins)

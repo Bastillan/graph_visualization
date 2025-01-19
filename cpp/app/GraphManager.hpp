@@ -7,7 +7,6 @@
 #include <boost/graph/graphml.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
-
 using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
