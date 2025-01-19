@@ -46,7 +46,7 @@ int load_graph(std::string path) {
     
     try {
         boost::dynamic_properties dp;
-        dp.property("description", get(boost::vertex_name, g));
+        dp.property("name", get(boost::vertex_name, g));
         boost::read_graphml(file, g, dp);
     } catch (const std::exception &e) {
         std::cerr << "Błąd podczas wczytywania grafu: " << e.what() << std::endl;
@@ -59,7 +59,7 @@ int load_graph(std::string path) {
 
     auto vertex_name_map = get(boost::vertex_name, g);
     for (auto [vi, vi_end] = vertices(g); vi != vi_end; ++vi) {
-        std::cout << "Vertex " << *vi << ": description = " << vertex_name_map[*vi] << std::endl;
+        std::cout << "Vertex " << *vi << ": name = " << vertex_name_map[*vi] << std::endl;
     }
 
     return 0;

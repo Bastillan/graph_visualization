@@ -4,41 +4,41 @@
     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
      http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
 
-  <key id="description" for="node" attr.name="description" attr.type="string"/>
+  <key id="name" for="node" attr.name="name" attr.type="string"/>
 
   <graph id="G" edgedefault="directed">
     <node id="n0">
-      <data key="description">Node n0</data>
+      <data key="name">Node n0</data>
     </node>
     <node id="n1">
-      <data key="description">Node n1</data>
+      <data key="name">Node n0</data>
     </node>
     <node id="n2">
-      <data key="description">Node n2</data>
+      <data key="name">Node n2</data>
     </node>
     <node id="n3">
-      <data key="description">Node n3</data>
+      <data key="name">Node n3</data>
     </node>
     <node id="n4">
-      <data key="description">Node n4</data>
+      <data key="name">Node n4</data>
     </node>
     <node id="n5">
-      <data key="description">Node n5</data>
+      <data key="name">Node n5</data>
     </node>
     <node id="n6">
-      <data key="description">Node n6</data>
+      <data key="name">Node n6</data>
     </node>
     <node id="n7">
-      <data key="description">Node n7</data>
+      <data key="name">Node n7</data>
     </node>
     <node id="n8">
-      <data key="description">Node n8</data>
+      <data key="name">Node n8</data>
     </node>
     <node id="n9">
-      <data key="description">Node n9</data>
+      <data key="name">Node n9</data>
     </node>
     <node id="n10">
-      <data key="description">Node n10</data>
+      <data key="name">Node n10</data>
     </node>
     <edge source="n0" target="n2"/>
     <edge source="n1" target="n2"/>
