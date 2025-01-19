@@ -28,7 +28,6 @@ namespace my_namespace {
             size_t num_vertices = boost::num_vertices(graph);
             int size = sqrt(num_vertices) + 1;
             std::unordered_map<int, std::pair<double, double>> coordinates;
-            // std::vector<std::pair<double, double>> coordinates(num_vertices, {0.0, 0.0});
 
             int i = 0;
             auto [v_begin, v_end] = vertices(graph);

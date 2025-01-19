@@ -56,6 +56,13 @@ std::unordered_map<int, std::pair<double, double>> calculateLayout(const Graph& 
     std::shared_ptr<my_plugin_api> plugin(create_plugin());
     auto coordinates = plugin->calculate_graph_coordinates(g);
     
+    for (const auto& entry : coordinates) {
+        int key = entry.first;  // Klucz
+        double x = entry.second.first;  // Pierwsza wartość pary
+        double y = entry.second.second; // Druga wartość pary
+
+        std::cout << "Key: " << key << ", Value: (" << x << ", " << y << ")" << std::endl;
+    }
 
     return coordinates;
 }
