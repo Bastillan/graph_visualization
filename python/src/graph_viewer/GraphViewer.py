@@ -6,7 +6,7 @@ class GraphViewer():
     def __init__(self):
         self.plugin_path="../cpp/app/plugins/libplugin.so"
         self.canva_size = (1000, 700)
-        self.start_coordinates = (100, 100)
+        self.coordinates = (100, 100)
         self.vertice_size = 60
         self.vertice_color = "blue"
         self.edge_width = 2
@@ -45,6 +45,11 @@ class GraphViewer():
         self.zoom_out_button.grid(column=4, row=0)
         self.canva = tk.Canvas(self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white")
         self.canva.grid(column=0, row=1, columnspan=5)
+
+        self.mouse_position = (0, 0)
+        self.canva.bind("<Button-2>", self.start_move)
+        self.canva.bind("<B2-Motion>", self.move)
+        self.canva.bind("<MouseWheel>", self.on_scroll)
         self.canva.bind("<Button-4>", self.on_scroll)
         self.canva.bind("<Button-5>", self.on_scroll)
 
@@ -77,10 +82,12 @@ class GraphViewer():
 
     def zoom_in(self):
         self.scale += 10
+        self.coordinates = (self.coordinates[0]-5, self.coordinates[1]-5)
         self.draw()
 
     def zoom_out(self):
         self.scale -= 10
+        self.coordinates = (self.coordinates[0]+5, self.coordinates[1]+5)
         self.draw()
 
     def on_scroll(self, event):
@@ -97,6 +104,15 @@ class GraphViewer():
             if event.num == 5:
                 self.zoom_out()
 
+    def start_move(self, event):
+        self.mouse_position = (event.x, event.y)
+        self.temp_coordinates = self.coordinates
+
+    def move(self, event):
+        x_move = event.x-self.mouse_position[0]
+        y_move = event.y-self.mouse_position[1]
+        self.coordinates = (self.temp_coordinates[0]+x_move, self.temp_coordinates[1]+y_move)
+        self.draw()
 
     def draw(self):
         self.canva.delete("all")
@@ -120,21 +136,21 @@ class GraphViewer():
             print(self.vertices[vertice])
 
     def draw_line(self, start, end):
-        xs = self.start_coordinates[0] + start[0]
-        xe = self.start_coordinates[0] + end[0]
-        ys = self.start_coordinates[1] + start[1]
-        ye = self.start_coordinates[1] + end[1]
+        xs = self.coordinates[0] + start[0]
+        xe = self.coordinates[0] + end[0]
+        ys = self.coordinates[1] + start[1]
+        ye = self.coordinates[1] + end[1]
 
         self.canva.create_line(xs, ys, xe, ye, fill=self.edge_color, width=self.edge_width)
 
     def draw_circle(self, x, y):
-        xs = self.start_coordinates[0] + (x-self.vertice_size/2)
-        xe = self.start_coordinates[0] + (x+self.vertice_size/2)
-        ys = self.start_coordinates[1] + (y-self.vertice_size/2)
-        ye = self.start_coordinates[1] + (y+self.vertice_size/2)
+        xs = self.coordinates[0] + (x-self.vertice_size/2)
+        xe = self.coordinates[0] + (x+self.vertice_size/2)
+        ys = self.coordinates[1] + (y-self.vertice_size/2)
+        ye = self.coordinates[1] + (y+self.vertice_size/2)
         self.canva.create_oval(xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color)
 
     def write_text(self, x, y, text):
-        x = self.start_coordinates[0] + x
-        y = self.start_coordinates[1] + y
+        x = self.coordinates[0] + x
+        y = self.coordinates[1] + y
         self.canva.create_text(x, y, text=text, font=("Arial", self.text_size), fill=self.text_color)
