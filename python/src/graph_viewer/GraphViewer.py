@@ -6,9 +6,13 @@ class GraphViewer():
     def __init__(self):
         self.plugin_path="../cpp/app/plugins/libplugin.so"
         self.canva_size = (1000, 700)
-        self.start_coordinates = (100, self.canva_size[1]-100)
+        self.start_coordinates = (100, 100)
         self.vertice_size = 60
+        self.vertice_color = "blue"
         self.edge_width = 2
+        self.edge_color = "red"
+        self.text_size = 10
+        self.text_color="black"
         self.scale = 200
         self.vertices = []
         self.vertices_coordinates = []
@@ -35,12 +39,14 @@ class GraphViewer():
         self.delete_node_button.grid(column=1, row=0)
         self.group_nodes_button = tk.Button(self.window, text="Group nodes")
         self.group_nodes_button.grid(column=2, row=0)
-        self.zoom_in_button = tk.Button(self.window, text="+")
+        self.zoom_in_button = tk.Button(self.window, text="+", command=self.zoom_in)
         self.zoom_in_button.grid(column=3, row=0)
-        self.zoom_out_button = tk.Button(self.window, text="-")
+        self.zoom_out_button = tk.Button(self.window, text="-", command=self.zoom_out)
         self.zoom_out_button.grid(column=4, row=0)
         self.canva = tk.Canvas(self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white")
         self.canva.grid(column=0, row=1, columnspan=5)
+        self.canva.bind("<Button-4>", self.on_scroll)
+        self.canva.bind("<Button-5>", self.on_scroll)
 
 
     def start(self):
@@ -54,8 +60,9 @@ class GraphViewer():
     def open_graph(self):
         self.graph_path = filedialog.askopenfilename(title="Choose graph")
         self.graph = loadGraph(self.graph_path)
-        self.vertices = self.graph.getGraphData()
+        self.vertices = self.graph.getVerticesData()
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.edges = self.graph.getEdges()
         self.draw()
 
     def create_new_graph(self):
@@ -68,17 +75,66 @@ class GraphViewer():
             except Exception as e:
                 print(f"Error: {e}")
 
+    def zoom_in(self):
+        self.scale += 10
+        self.draw()
+
+    def zoom_out(self):
+        self.scale -= 10
+        self.draw()
+
+    def on_scroll(self, event):
+        if event.delta != 0:
+            if event.delta > 0:
+                self.scale += 10
+                print("zoom_in")
+            else:
+                self.scale -= 10
+                print("zoom_out")
+        else:
+            if event.num == 4:
+                self.zoom_in()
+            if event.num == 5:
+                self.zoom_out()
+
+
     def draw(self):
-        # print(self.vertices_coordinates)
-        for vertice_coordinate in self.vertices_coordinates:
-            x, y = self.vertices_coordinates[vertice_coordinate]
+        self.canva.delete("all")
+        for edge in self.edges:
+            edge_start = self.vertices_coordinates.get(edge[0])
+            edge_end = self.vertices_coordinates.get(edge[1])
+            edge_start = (edge_start[0]*self.scale, edge_start[1]*self.scale)
+            edge_end = (edge_end[0]*self.scale, edge_end[1]*self.scale)
+            print(edge_start, edge_end)
+            self.draw_line(edge_start, edge_end)
+
+        for vertice in self.vertices_coordinates:
+            x, y = self.vertices_coordinates[vertice]
+            text = self.vertices[vertice]
             x = x * self.scale
             y = y * self.scale
             self.draw_circle(x, y)
+            self.write_text(x, y, text)
+
+        for vertice in self.vertices:
+            print(self.vertices[vertice])
+
+    def draw_line(self, start, end):
+        xs = self.start_coordinates[0] + start[0]
+        xe = self.start_coordinates[0] + end[0]
+        ys = self.start_coordinates[1] + start[1]
+        ye = self.start_coordinates[1] + end[1]
+
+        self.canva.create_line(xs, ys, xe, ye, fill=self.edge_color, width=self.edge_width)
 
     def draw_circle(self, x, y):
-        x_s = self.start_coordinates[0] + (x-self.vertice_size/2)
-        x_e = self.start_coordinates[0] + (x+self.vertice_size/2)
-        y_s = self.start_coordinates[1] - (y-self.vertice_size/2)
-        y_e = self.start_coordinates[1] - (y+self.vertice_size/2)
-        self.canva.create_oval(x_s, y_s, x_e, y_e, fill="blue")
+        xs = self.start_coordinates[0] + (x-self.vertice_size/2)
+        xe = self.start_coordinates[0] + (x+self.vertice_size/2)
+        ys = self.start_coordinates[1] + (y-self.vertice_size/2)
+        ye = self.start_coordinates[1] + (y+self.vertice_size/2)
+        self.canva.create_oval(xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color)
+
+    def write_text(self, x, y, text):
+        x = self.start_coordinates[0] + x
+        y = self.start_coordinates[1] + y
+        self.canva.create_text(x, y, text=text, font=("Arial", self.text_size), fill=self.text_color)
