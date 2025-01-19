@@ -9,7 +9,8 @@ PYBIND11_MODULE(graphs, handle) {
     handle.doc() = "This is the module docs.";
 
     py::class_<Graph>(handle, "Graph")
-        .def("getGraphData", &getGraphData);
+        .def("getVerticesData", &getVerticesData)
+        .def("getEdges", &getEdges);
     
     handle.def("loadGraph", &loadGraph);
     handle.def("calculateLayout", &calculateLayout);
