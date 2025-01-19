@@ -27,4 +27,4 @@ py_setup:
 
 run:
 	cd python && \
-	pdm run python -m src.graph_viewer.gui
+	pdm run python -m src.graph_viewer.main
