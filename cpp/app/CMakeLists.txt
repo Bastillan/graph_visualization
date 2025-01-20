@@ -5,6 +5,8 @@ set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 find_package(Boost REQUIRED)
 
+set(CMAKE_CXX_CLANG_TIDY)
+
 add_library(graphs_core STATIC GraphManager.cpp)
 target_link_libraries(graphs_core PRIVATE Boost::filesystem Boost::system Boost::graph)
 
