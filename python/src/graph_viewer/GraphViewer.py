@@ -14,8 +14,8 @@ class GraphViewer():
         self.text_size = 10
         self.text_color="black"
         self.scale = 200
-        self.vertices = []
-        self.vertices_coordinates = []
+        self.vertices = {}
+        self.vertices_coordinates = {}
         self.edges=[]
         self.graph = []
         self.selected_vertices = []
@@ -162,8 +162,54 @@ class GraphViewer():
         self.draw()
 
     def add_vertice(self):
-        # here should be cpp function saving updated graph
-        pass
+        new_vertice_window = tk.Frame(self.window, relief="raised", borderwidth=2)
+        new_vertice_window.place(relx=0.5, rely=0.5, anchor="center", width=300, height=450)
+        vertice_window_label = tk.Label(new_vertice_window, text="Enter new vertice data")
+        vertice_window_label.pack(pady=10)
+        vertice_data_label = tk.Label(new_vertice_window, text="Vertice data")
+        vertice_data_label.pack()
+
+        self.node_data_entry = tk.Entry(new_vertice_window, width=25)
+        self.node_data_entry.pack()
+
+        edge_label = tk.Label(new_vertice_window, text="Edges")
+        edge_label.pack()
+        row_frame = tk.Frame(new_vertice_window)
+        row_frame.pack(pady=10, padx=10)
+        self.edge_node1_entry = tk.Entry(row_frame, width=10)
+        self.edge_node1_entry.pack(side="left", padx=5)
+        self.edge_node2_entry = tk.Entry(row_frame, width=10)
+        self.edge_node2_entry.pack(side="left", padx=5)
+        self.add_edge_button = tk.Button(row_frame, text="+", command=self.add_edge)
+        self.add_edge_button.pack(side="left", padx=5)
+
+        self.edges_list = tk.Listbox(new_vertice_window)
+        self.edges_list.pack()
+
+        save_button = tk.Button(new_vertice_window, text="Save", command = self.save_new_vertice)
+        save_button.pack()
+        close_button = tk.Button(new_vertice_window, text="Close", command=new_vertice_window.destroy)
+        close_button.pack()
+
+    def add_edge(self):
+        val1 = self.edge_node1_entry.get()
+        val2 = self.edge_node2_entry.get()
+        if val1 and val1!="" and val2 and val2!="":
+            self.edges_list.insert(tk.END, (int(val1), int(val2)))
+
+    def save_new_vertice(self):
+        if len(self.vertices) > 0:
+            new_vertice = max(self.vertices)+1
+        else:
+            new_vertice = 0
+        self.edges = self.edges + [(edge[0], edge[1]) for edge in self.edges_list.get(0, tk.END)]
+        if self.node_data_entry.get() and self.node_data_entry.get() != "":
+            self.vertices[new_vertice] = self.node_data_entry.get()
+            self.vertices_coordinates[new_vertice] = (1, 1)
+        # here save new node
+        # self.graph =
+        # self.vertices_coordinates = calculateLayout(self.graph)
+        self.draw()
 
     def delete_vertices(self):
         new_vertices = {}
