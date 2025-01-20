@@ -11,8 +11,9 @@
 #include <vector>
 
 using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
+using EdgeProperty = boost::no_property;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-                                    VertexProperty>;
+                                    VertexProperty, EdgeProperty>;
 
 namespace PluginInterface {
 
