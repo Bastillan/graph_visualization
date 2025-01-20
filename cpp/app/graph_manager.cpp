@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2024
  *
  */
-#include "PluginInterface.hpp"
+#include "plugin_interface.hpp"
 #include <boost/dll/import.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphml.hpp>
@@ -62,10 +62,10 @@ calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::shared_library lib(plug_path);
 
     auto create_plugin =
-        lib.get<PluginInterface::my_plugin_api*()>("create_plugin");
-    std::shared_ptr<PluginInterface::my_plugin_api> plugin(create_plugin());
+        lib.get<PluginInterface::MyPluginApi*()>("create_plugin");
+    std::shared_ptr<PluginInterface::MyPluginApi> plugin(create_plugin());
 
-    auto coordinates = plugin->calculate_graph_coordinates(g);
+    auto coordinates = plugin->calculateGraphCoordinates(g);
 
     return coordinates;
 }
