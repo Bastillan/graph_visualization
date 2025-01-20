@@ -51,6 +51,9 @@ class GraphViewer():
         self.canva.bind("<Button-1>", self.start_select)
         self.canva.bind("<B1-Motion>", self.select)
         self.canva.bind("<ButtonRelease-1>", self.end_select)
+        self.vertice_moving = False
+        self.canva.bind("<Button-3>", self.start_move_vertice)
+        self.canva.bind("<B3-Motion>", self.move_vertice)
         self.canva.bind("<Button-2>", self.start_move)
         self.canva.bind("<B2-Motion>", self.move)
         self.canva.bind("<MouseWheel>", self.on_scroll)
@@ -138,6 +141,24 @@ class GraphViewer():
 
             if xs > xms and xe < event.x and ys > yms and ye < event.y:
                 self.selected_vertices.append(vertice)
+        self.draw()
+
+    def start_move_vertice(self, event):
+        self.temp_coordinates = (event.x, event.y)
+
+    def move_vertice(self, event):
+        self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
+        for vertice in self.vertices_coordinates:
+            x = self.vertices_coordinates[vertice][0] * self.scale
+            y = self.vertices_coordinates[vertice][1] * self.scale
+            xs = self.coordinates[0] + (x-self.vertice_size/2)
+            xe = self.coordinates[0] + (x+self.vertice_size/2)
+            ys = self.coordinates[1] + (y-self.vertice_size/2)
+            ye = self.coordinates[1] + (y+self.vertice_size/2)
+            if xs < event.x and xe > event.x and ys < event.y and ye > event.y and not self.vertice_moving:
+                self.vertice_moving=True
+                self.vertices_coordinates[vertice] = ((-self.coordinates[0] + event.x)/self.scale, (-self.coordinates[1] + event.y)/self.scale)
+        self.vertice_moving=False
         self.draw()
 
     def add_vertice(self):
