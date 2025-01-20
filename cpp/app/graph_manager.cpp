@@ -64,7 +64,7 @@ calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
     boost::dll::shared_library lib(plug_path);
 
-    auto create_plugin =
+    auto createPlugin =
         lib.get<PluginInterface::MyPluginApi*()>("createPlugin");
     std::shared_ptr<PluginInterface::MyPluginApi> plugin(createPlugin());
 
