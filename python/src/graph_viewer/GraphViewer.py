@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from graphs import *
+from graphs import Graph, loadGraph, saveGraph, calculateLayout
 
 
 class GraphViewer:
@@ -30,7 +30,9 @@ class GraphViewer:
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.file_menu.add_command(label="New", command=self.create_new_graph)
         self.file_menu.add_command(label="Open graph", command=self.open_graph)
-        self.file_menu.add_command(label="Load plugin", command=self.load_plugin)
+        self.file_menu.add_command(
+            label="Load plugin", command=self.load_plugin
+        )
         self.file_menu.add_command(label="Save")
         # self.file_menu.add_separator()  # Separator
         self.menu_bar.add_cascade(label="File", menu=self.file_menu)
@@ -48,16 +50,25 @@ class GraphViewer:
             self.window, text="Group nodes", command=self.group_vertices
         )
         self.group_nodes_button.grid(column=2, row=0)
-        self.zoom_in_button = tk.Button(self.window, text="+", command=self.zoom_in)
+        self.zoom_in_button = tk.Button(
+            self.window, text="+", command=self.zoom_in
+        )
         self.zoom_in_button.grid(column=3, row=0)
-        self.zoom_out_button = tk.Button(self.window, text="-", command=self.zoom_out)
+        self.zoom_out_button = tk.Button(
+            self.window, text="-", command=self.zoom_out
+        )
         self.zoom_out_button.grid(column=4, row=0)
-        self.save_button = tk.Button(self.window, text="Save", command=self.save_graph)
+        self.save_button = tk.Button(
+            self.window, text="Save", command=self.save_graph
+        )
         self.save_button.grid(column=5, row=0)
         self.message_label = tk.Label(self.window, text="", width=20)
         self.message_label.grid(column=6, row=0)
         self.canva = tk.Canvas(
-            self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white"
+            self.window,
+            width=self.canva_size[0],
+            height=self.canva_size[1],
+            bg="white",
         )
         self.canva.grid(column=0, row=1, columnspan=7)
 
@@ -81,19 +92,25 @@ class GraphViewer:
 
     def load_plugin(self):
         self.plugin_path = filedialog.askopenfilename(title="Choose plugin")
-        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.vertices_coordinates = calculateLayout(
+            self.graph, self.plugin_path
+        )
         self.draw()
 
     def open_graph(self):
         self.graph_path = filedialog.askopenfilename(title="Choose graph")
         self.graph = loadGraph(self.graph_path)
         self.vertices = self.graph.getVerticesData()
-        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.vertices_coordinates = calculateLayout(
+            self.graph, self.plugin_path
+        )
         self.edges = self.graph.getEdges()
         self.draw()
 
     def create_new_graph(self):
-        new_graph_path = filedialog.asksaveasfilename(title="Enter new graph name")
+        new_graph_path = filedialog.asksaveasfilename(
+            title="Enter new graph name"
+        )
         if new_graph_path:
             try:
                 with open(new_graph_path, "w") as file:
@@ -203,7 +220,9 @@ class GraphViewer:
         self.vertice_moving = None
 
     def add_vertice(self):
-        new_vertice_window = tk.Frame(self.window, relief="raised", borderwidth=2)
+        new_vertice_window = tk.Frame(
+            self.window, relief="raised", borderwidth=2
+        )
         new_vertice_window.place(
             relx=0.5, rely=0.5, anchor="center", width=300, height=450
         )
@@ -225,18 +244,24 @@ class GraphViewer:
         self.edge_node1_entry.pack(side="left", padx=5)
         self.edge_node2_entry = tk.Entry(row_frame, width=10)
         self.edge_node2_entry.pack(side="left", padx=5)
-        self.add_edge_button = tk.Button(row_frame, text="+", command=self.add_edge)
+        self.add_edge_button = tk.Button(
+            row_frame, text="+", command=self.add_edge
+        )
         self.add_edge_button.pack(side="left", padx=5)
 
         self.edges_list = tk.Listbox(new_vertice_window)
         self.edges_list.pack()
 
         save_button = tk.Button(
-            new_vertice_window, text="Save", command=self.save_new_vertice_and_edges
+            new_vertice_window,
+            text="Save",
+            command=self.save_new_vertice_and_edges,
         )
         save_button.pack()
         close_button = tk.Button(
-            new_vertice_window, text="Close", command=new_vertice_window.destroy
+            new_vertice_window,
+            text="Close",
+            command=new_vertice_window.destroy,
         )
         close_button.pack()
 
@@ -252,7 +277,9 @@ class GraphViewer:
         for edge in set(self.edges_list.get(0, tk.END)):
             self.graph.addEdge(edge[0], edge[1])
         self.vertices = self.graph.getVerticesData()
-        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.vertices_coordinates = calculateLayout(
+            self.graph, self.plugin_path
+        )
         self.edges = self.graph.getEdges()
         self.message_label.config(text="Modified", fg="orange")
         self.draw()
@@ -263,7 +290,9 @@ class GraphViewer:
             self.graph.removeNode(vertice)
         # saving new parameters
         self.vertices = self.graph.getVerticesData()
-        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.vertices_coordinates = calculateLayout(
+            self.graph, self.plugin_path
+        )
         self.edges = self.graph.getEdges()
         self.selected_vertices = []
         self.message_label.config(text="Modified", fg="orange")
@@ -294,7 +323,9 @@ class GraphViewer:
 
         # saving new parameters
         self.vertices = self.graph.getVerticesData()
-        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.vertices_coordinates = calculateLayout(
+            self.graph, self.plugin_path
+        )
         self.edges = self.graph.getEdges()
         self.selected_vertices = []
         self.message_label.config(text="Modified", fg="orange")
@@ -316,7 +347,10 @@ class GraphViewer:
         for edge in self.edges:
             edge_start = self.vertices_coordinates.get(edge[0])
             edge_end = self.vertices_coordinates.get(edge[1])
-            edge_start = (edge_start[0] * self.scale, edge_start[1] * self.scale)
+            edge_start = (
+                edge_start[0] * self.scale,
+                edge_start[1] * self.scale,
+            )
             edge_end = (edge_end[0] * self.scale, edge_end[1] * self.scale)
             self.draw_line(edge_start, edge_end)
 
@@ -347,15 +381,26 @@ class GraphViewer:
         ys = self.coordinates[1] + (y - self.vertice_size / 2)
         ye = self.coordinates[1] + (y + self.vertice_size / 2)
         if alternative_color:
-            self.canva.create_oval(xs, ys, xe, ye, fill="green", outline="green")
+            self.canva.create_oval(
+                xs, ys, xe, ye, fill="green", outline="green"
+            )
         else:
             self.canva.create_oval(
-                xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color
+                xs,
+                ys,
+                xe,
+                ye,
+                fill=self.vertice_color,
+                outline=self.vertice_color,
             )
 
     def write_text(self, x, y, text):
         x = self.coordinates[0] + x
         y = self.coordinates[1] + y
         self.canva.create_text(
-            x, y, text=text, font=("Arial", self.text_size), fill=self.text_color
+            x,
+            y,
+            text=text,
+            font=("Arial", self.text_size),
+            fill=self.text_color,
         )
