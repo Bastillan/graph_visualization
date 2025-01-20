@@ -205,7 +205,7 @@ class GraphViewer():
         if val1 and val1!="" and val2 and val2!="":
             self.edges_list.insert(tk.END, (int(val1), int(val2)))
 
-    def save_new_vertice_with_nodes(self): # zrobione
+    def save_new_vertice_with_nodes(self):
         if self.node_data_entry.get() and self.node_data_entry.get() != "":
             self.graph.addNode(self.node_data_entry.get())
         for edge in set(self.edges_list.get(0, tk.END)):
@@ -228,37 +228,26 @@ class GraphViewer():
         # here should be cpp function saving updated graph
 
     def group_vertices(self):
-        new_vertices = {}
-        new_vertices_coordinates = {}
-        new_edges = []
         new_data = []
-        # updating vertices
-        for vertice in self.vertices:
-            if vertice not in self.selected_vertices:
-                new_vertices[vertice] = self.vertices[vertice]
-            else:
-                new_data.append(self.vertices[vertice])
-        new_vertice = max(new_vertices) + 1
-        new_vertices[new_vertice] = ", ".join(new_data)
+
+        # updating vertices     
+        for vertice in self.selected_vertices:
+            new_data.append(self.vertices[vertice])
+            self.graph.removeNode(vertice)
+        new_vertice = self.graph.addNode(", ".join(new_data))
+
         # updating edges
         for edge in self.edges:
-            if edge[0] not in self.selected_vertices and edge[1] not in self.selected_vertices:
-                new_edges.append(edge)
-            elif edge[0] in self.selected_vertices and edge[1] not in self.selected_vertices:
-                new_edges.append((edge[1], new_vertice))
+            if edge[0] in self.selected_vertices and edge[1] not in self.selected_vertices:
+                self.graph.addEdge(edge[1], new_vertice)
             elif edge[1] in self.selected_vertices and edge[0] not in self.selected_vertices:
-                new_edges.append((edge[0], new_vertice))
-        # updating vertices coordinates - delete this after implementing saving updated graph function
-        for vertice in self.vertices_coordinates:
-            if vertice not in self.selected_vertices:
-                new_vertices_coordinates[vertice] = self.vertices_coordinates[vertice]
-        new_vertices_coordinates[new_vertice] = (1, 1)
+                self.graph.addEdge(edge[0], new_vertice)
+
         # saving new parameters
-        self.vertices = new_vertices
-        self.vertices_coordinates = new_vertices_coordinates
-        self.edges = list(set(new_edges))
-        # here should be cpp function saving updated graph
-        # self.vertices_coordinates = calculateLayout(self.graph) - uncomment this after implementing saving updated graph function
+        self.vertices = self.graph.getVerticesData()
+        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.edges = self.graph.getEdges()
+        self.selected_vertices = []
         self.draw()
 
     def draw(self):
