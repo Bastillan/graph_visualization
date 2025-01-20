@@ -10,7 +10,6 @@
  *
  */
 #include "PluginInterface.hpp"
-#include "math.hpp"
 #include <boost/dll/import.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphml.hpp>
