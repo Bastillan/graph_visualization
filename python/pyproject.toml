@@ -5,7 +5,6 @@ description = "Default template for PDM package"
 authors = [
     {name = "jkedzier", email = "jedrzej.kedzierski.stud@pw.edu.pl"},
 ]
-dependencies = []
 requires-python = "==3.12.*"
 readme = "README.md"
 license = {text = "MIT"}
@@ -22,3 +21,10 @@ test = [
 lint = [
     "flake8>=7.1.1",
 ]
+format = [
+    "black>=24.10.0"
+]
+
+[tool.pdm.scripts]
+format = "black ./src ./tests"
+lint = "flake8 ./src ./tests"

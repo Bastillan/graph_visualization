@@ -29,7 +29,14 @@ run:
 	cd python && \
 	pdm run python -m src.graph_viewer.main
 
-format:
+format_cpp:
 	cd cpp && \
 	find . -type f \( -iname "*.cpp" -o -iname "*.hpp" \) -not -path "build/*" | xargs clang-format -i --style=file
 
+format_py:
+	cd python && \
+	pdm run format
+
+lint_py:
+	cd python && \
+	pdm run lint
