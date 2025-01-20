@@ -13,7 +13,7 @@ using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
                                     VertexProperty>;
 
 Graph loadGraph(const std::string path);
-// bool saveGraph(const Graph& g, const std::string path);
+bool saveGraph(Graph& g, const std::string path);
 std::unordered_map<int, std::pair<double, double>>
 calculateLayout(const Graph &g, std::string plugin_path);
 std::unordered_map<int, std::string> getVerticesData(const Graph &g);

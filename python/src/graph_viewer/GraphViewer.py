@@ -19,6 +19,7 @@ class GraphViewer():
         self.edges=[]
         self.graph = Graph()
         self.selected_vertices = []
+        self.graph_path=""
 
         self.window = tk.Tk()
         self.window.title("Graph viewer")
@@ -44,8 +45,12 @@ class GraphViewer():
         self.zoom_in_button.grid(column=3, row=0)
         self.zoom_out_button = tk.Button(self.window, text="-", command=self.zoom_out)
         self.zoom_out_button.grid(column=4, row=0)
+        self.save_button = tk.Button(self.window, text="Save", command=self.save_graph)
+        self.save_button.grid(column=5, row=0)
+        self.message_label =tk.Label(self.window, text="", width=20)
+        self.message_label.grid(column=6, row=0)
         self.canva = tk.Canvas(self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white")
-        self.canva.grid(column=0, row=1, columnspan=5)
+        self.canva.grid(column=0, row=1, columnspan=7)
 
         self.mouse_position = (0, 0)
         self.canva.bind("<Button-1>", self.start_select)
@@ -86,6 +91,7 @@ class GraphViewer():
                 with open(new_graph_path, "w") as file:
                     file.write("")
                 self.graph_path = new_graph_path
+                self.message_label.config(text="Created new graph", fg="green")
             except Exception as e:
                 print(f"Error: {e}")
 
@@ -160,7 +166,7 @@ class GraphViewer():
         if self.vertice_moving is not None:
             self.vertices_coordinates[self.vertice_moving] = ((-self.coordinates[0] + event.x)/self.scale, (-self.coordinates[1] + event.y)/self.scale)
             self.draw()
-    
+
     def end_move_vertice(self, event):
         self.vertice_moving = None
 
@@ -189,7 +195,7 @@ class GraphViewer():
         self.edges_list = tk.Listbox(new_vertice_window)
         self.edges_list.pack()
 
-        save_button = tk.Button(new_vertice_window, text="Save", command = self.save_new_vertice_with_nodes)
+        save_button = tk.Button(new_vertice_window, text="Save", command = self.save_new_vertice_and_edges)
         save_button.pack()
         close_button = tk.Button(new_vertice_window, text="Close", command=new_vertice_window.destroy)
         close_button.pack()
@@ -200,7 +206,7 @@ class GraphViewer():
         if val1 and val1!="" and val2 and val2!="":
             self.edges_list.insert(tk.END, (int(val1), int(val2)))
 
-    def save_new_vertice_with_nodes(self):
+    def save_new_vertice_and_edges(self):
         if self.node_data_entry.get() and self.node_data_entry.get() != "":
             self.graph.addNode(self.node_data_entry.get())
         for edge in set(self.edges_list.get(0, tk.END)):
@@ -208,6 +214,7 @@ class GraphViewer():
         self.vertices = self.graph.getVerticesData()
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
         self.edges = self.graph.getEdges()
+        self.message_label.config(text="modified", fg="orange")
         self.draw()
 
     def delete_vertices(self):
@@ -219,13 +226,14 @@ class GraphViewer():
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
         self.edges = self.graph.getEdges()
         self.selected_vertices = []
+        self.message_label.config(text="modified", fg="orange")
         self.draw()
         # here should be cpp function saving updated graph
 
     def group_vertices(self):
         new_data = []
 
-        # updating vertices     
+        # updating vertices
         for vertice in self.selected_vertices:
             new_data.append(self.vertices[vertice])
             self.graph.removeNode(vertice)
@@ -243,7 +251,19 @@ class GraphViewer():
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
         self.edges = self.graph.getEdges()
         self.selected_vertices = []
+        self.message_label.config(text="modified", fg="orange")
         self.draw()
+
+    def save_graph(self):
+        if self.graph_path != "":
+            try:
+                saveGraph(self.graph, self.graph_path)
+                self.message_label.config(text="Saved", fg="green")
+            except Exception as e:
+                self.message_label.config(text=f"Error: {e}", fg="red")
+                print(f"Exception: {e}")
+        else:
+            self.message_label.config(text="First create file", fg="red")
 
     def draw(self):
         self.canva.delete("all")

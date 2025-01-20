@@ -90,12 +90,13 @@ Graph loadGraph(const std::string path) {
 
     return g;
 }
-/*
-bool saveGraph(const Graph& g, const std::string path) {
+
+bool saveGraph(Graph& g, const std::string path) {
     std::ofstream file(path);
     if (!file.is_open()) {
-        std::cerr << "Nie udało się otworzyć  pliku graph.graphml!" <<
-std::endl; return false;
+        std::cerr << "Nie udało się otworzyć pliku graph.graphml!" <<
+        std::endl;
+        return false;
     }
 
     try {
@@ -104,10 +105,11 @@ std::endl; return false;
         boost::write_graphml(file, g, dp);
     } catch (const std::exception &e) {
         std::cerr << "Błąd podczas wczytywania grafu: " << e.what() <<
-std::endl; return false;
+        std::endl;
+        return false;
     }
     return true;
-}*/
+}
 
 int addNode(Graph &g, const std::string &name) {
     auto v = add_vertex(g);
