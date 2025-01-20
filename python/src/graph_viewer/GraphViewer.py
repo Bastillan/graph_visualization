@@ -182,7 +182,6 @@ class GraphViewer():
         new_vertice = max(new_vertices) + 1
         new_vertices[new_vertice] = ", ".join(new_data)
         # updating edges
-        print(self.selected_vertices)
         for edge in self.edges:
             if edge[0] not in self.selected_vertices and edge[1] not in self.selected_vertices:
                 new_edges.append(edge)
@@ -198,8 +197,7 @@ class GraphViewer():
         # saving new parameters
         self.vertices = new_vertices
         self.vertices_coordinates = new_vertices_coordinates
-        self.edges = new_edges
-        print(self.edges)
+        self.edges = list(set(new_edges))
         # here should be cpp function saving updated graph
         # self.vertices_coordinates = calculateLayout(self.graph) - uncomment this after implementing saving updated graph function
         self.draw()
@@ -238,7 +236,7 @@ class GraphViewer():
         ys = self.coordinates[1] + (y-self.vertice_size/2)
         ye = self.coordinates[1] + (y+self.vertice_size/2)
         if alternative_color:
-            self.canva.create_oval(xs, ys, xe, ye, fill="purple", outline="purple")
+            self.canva.create_oval(xs, ys, xe, ye, fill="green", outline="green")
         else:
             self.canva.create_oval(xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color)
 
