@@ -1,6 +1,6 @@
 /**
  * @file plugin_interface.hpp
- * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (michal.pienkos.stud@pw.edu.pl)
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (jedrzej.kedzierski.stud@pw.edu.pl)
  * @brief Interface for graph calculation plugins.
  * @version 0.1
  * @date 2025-01-20
