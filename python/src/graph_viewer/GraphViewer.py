@@ -17,7 +17,7 @@ class GraphViewer():
         self.vertices = {}
         self.vertices_coordinates = {}
         self.edges=[]
-        self.graph = []
+        self.graph = Graph()
         self.selected_vertices = []
 
         self.window = tk.Tk()
@@ -149,17 +149,20 @@ class GraphViewer():
 
     def start_move_vertice(self, event):
         for vertice in self.vertices_coordinates:
+            print(vertice, self.vertices_coordinates[vertice])
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
             xs = self.coordinates[0] + (x-self.vertice_size/2)
             xe = self.coordinates[0] + (x+self.vertice_size/2)
             ys = self.coordinates[1] + (y-self.vertice_size/2)
             ye = self.coordinates[1] + (y+self.vertice_size/2)
-            if xs < event.x and xe > event.x and ys < event.y and ye > event.y and not self.vertice_moving:
+            print(xs, xe, ys, ye, event.x, event.y, self.vertice_moving, vertice)
+            print(xs < event.x and xe > event.x and ys < event.y and ye > event.y and self.vertice_moving is None)
+            if xs < event.x and xe > event.x and ys < event.y and ye > event.y and self.vertice_moving is None:
                 self.vertice_moving = vertice
 
     def move_vertice(self, event):
-        if self.vertice_moving:
+        if self.vertice_moving is not None:
             self.vertices_coordinates[self.vertice_moving] = ((-self.coordinates[0] + event.x)/self.scale, (-self.coordinates[1] + event.y)/self.scale)
             self.draw()
     
