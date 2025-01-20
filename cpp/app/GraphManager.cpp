@@ -32,8 +32,8 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
                                     VertexProperty>;
 
-std::unordered_map<int, std::string> getVerticesData(const Graph &g) {
-    std::unordered_map<int, std::string> data;
+std::unordered_map<size_t, std::string> getVerticesData(const Graph &g) {
+    std::unordered_map<size_t, std::string> data;
 
     auto vertex_name_map = get(boost::vertex_name, g);
     for (auto [vi, vi_end] = vertices(g); vi != vi_end; ++vi) {
@@ -43,8 +43,8 @@ std::unordered_map<int, std::string> getVerticesData(const Graph &g) {
     return data;
 }
 
-std::vector<std::pair<int, int>> getEdges(const Graph &g) {
-    std::vector<std::pair<int, int>> edges_list;
+std::vector<std::pair<size_t, size_t>> getEdges(const Graph &g) {
+    std::vector<std::pair<size_t, size_t>> edges_list;
 
     for (auto [ei, ei_end] = edges(g); ei != ei_end; ++ei) {
         int source = boost::source(*ei, g);
@@ -55,12 +55,13 @@ std::vector<std::pair<int, int>> getEdges(const Graph &g) {
 }
 
 std::unordered_map<int, std::pair<double, double>>
-calculateLayout(const Graph &g, std::string plugin_path) {
+calculateLayout(const Graph &g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
     boost::dll::shared_library lib(plug_path);
-    auto create_plugin = lib.get<my_plugin_api *()>("create_plugin");
 
+    auto create_plugin = lib.get<my_plugin_api *()>("create_plugin");
     std::shared_ptr<my_plugin_api> plugin(create_plugin());
+    
     auto coordinates = plugin->calculate_graph_coordinates(g);
 
     return coordinates;
@@ -117,25 +118,25 @@ int addNode(Graph &g, const std::string &name) {
     return v;
 }
 
-void addEdge(Graph &g, int source, int target) {
-    // if (source >= num_vertices(g) || target >= num_vertices(g)) {
-    //     throw std::invalid_argument("Invalid source or target node id");
-    // }
+void addEdge(Graph &g, size_t source, size_t target) {
+    if (source >= num_vertices(g) || target >= num_vertices(g)) {
+        throw std::invalid_argument("Invalid source or target node id");
+    }
     boost::add_edge(source, target, g);
 }
 
-void removeNode(Graph &g, int node) {
-    // if (node >= num_vertices(g)) {
-    //     throw std::invalid_argument("Invalid node id");
-    // }
+void removeNode(Graph &g, size_t node) {
+    if (node >= num_vertices(g)) {
+        throw std::invalid_argument("Invalid node id");
+    }
     clear_vertex(node, g);
     remove_vertex(node, g);
 }
 
-void removeEdge(Graph &g, int source, int target) {
-    // if (source >= num_vertices(g) || target >= num_vertices(g)) {
-    //     throw std::invalid_argument("Invalid source or target node id");
-    // }
+void removeEdge(Graph &g, size_t source, size_t target) {
+    if (source >= num_vertices(g) || target >= num_vertices(g)) {
+        throw std::invalid_argument("Invalid source or target node id");
+    }
     auto edge_pair = boost::edge(source, target, g);
     if (edge_pair.second) {
         boost::remove_edge(edge_pair.first, g);
