@@ -42,7 +42,7 @@ class graph_calculate : public PluginInterface::my_plugin_api {
 
 // Exporting `my_namespace::plugin` variable with alias name `plugin`
 // (Has the same effect as `BOOST_DLL_ALIAS(my_namespace::plugin, plugin)`)
-extern "C" BOOST_SYMBOL_EXPORT PluginInterface::my_plugin_api *create_plugin() {
+extern "C" BOOST_SYMBOL_EXPORT PluginInterface::my_plugin_api* create_plugin() {
     return new graph_calculate();
 }
 

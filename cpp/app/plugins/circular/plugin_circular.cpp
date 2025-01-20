@@ -29,8 +29,9 @@ class graph_calculate : public PluginInterface::my_plugin_api {
         int i = 0;
         auto [v_begin, v_end] = vertices(graph);
         for (auto v_it = v_begin; v_it != v_end; ++v_it) {
-            coordinates[i] = (std::make_pair(cos(2 * M_PI * i / num_vertices) + 1,
-                                             sin(2 * M_PI * i / num_vertices) + 1));
+            coordinates[i] =
+                (std::make_pair(cos(2 * M_PI * i / num_vertices) + 1,
+                                sin(2 * M_PI * i / num_vertices) + 1));
             ++i;
         }
 
@@ -42,7 +43,7 @@ class graph_calculate : public PluginInterface::my_plugin_api {
 
 // Exporting `my_namespace::plugin` variable with alias name `plugin`
 // (Has the same effect as `BOOST_DLL_ALIAS(my_namespace::plugin, plugin)`)
-extern "C" BOOST_SYMBOL_EXPORT PluginInterface::my_plugin_api *create_plugin() {
+extern "C" BOOST_SYMBOL_EXPORT PluginInterface::my_plugin_api* create_plugin() {
     return new graph_calculate();
 }
 

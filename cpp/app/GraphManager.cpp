@@ -34,7 +34,7 @@ using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
 
 namespace GraphManager {
 
-std::unordered_map<size_t, std::string> getVerticesData(const Graph &g) {
+std::unordered_map<size_t, std::string> getVerticesData(const Graph& g) {
     std::unordered_map<size_t, std::string> data;
 
     auto vertex_name_map = get(boost::vertex_name, g);
@@ -45,7 +45,7 @@ std::unordered_map<size_t, std::string> getVerticesData(const Graph &g) {
     return data;
 }
 
-std::vector<std::pair<size_t, size_t>> getEdges(const Graph &g) {
+std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
     std::vector<std::pair<size_t, size_t>> edges_list;
 
     for (auto [ei, ei_end] = edges(g); ei != ei_end; ++ei) {
@@ -57,13 +57,14 @@ std::vector<std::pair<size_t, size_t>> getEdges(const Graph &g) {
 }
 
 std::unordered_map<int, std::pair<double, double>>
-calculateLayout(const Graph &g, const std::string plugin_path) {
+calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
     boost::dll::shared_library lib(plug_path);
 
-    auto create_plugin = lib.get<PluginInterface::my_plugin_api *()>("create_plugin");
+    auto create_plugin =
+        lib.get<PluginInterface::my_plugin_api*()>("create_plugin");
     std::shared_ptr<PluginInterface::my_plugin_api> plugin(create_plugin());
-    
+
     auto coordinates = plugin->calculate_graph_coordinates(g);
 
     return coordinates;
@@ -84,7 +85,7 @@ Graph loadGraph(const std::string path) {
         boost::dynamic_properties dp;
         dp.property("name", get(boost::vertex_name, g));
         boost::read_graphml(file, g, dp);
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         std::cerr << "Błąd podczas wczytywania grafu: " << e.what()
                   << std::endl;
         return 1;
@@ -96,8 +97,7 @@ Graph loadGraph(const std::string path) {
 bool saveGraph(Graph& g, const std::string path) {
     std::ofstream file(path);
     if (!file.is_open()) {
-        std::cerr << "Nie udało się otworzyć pliku graph.graphml!" <<
-        std::endl;
+        std::cerr << "Nie udało się otworzyć pliku graph.graphml!" << std::endl;
         return false;
     }
 
@@ -105,29 +105,29 @@ bool saveGraph(Graph& g, const std::string path) {
         boost::dynamic_properties dp;
         dp.property("name", get(boost::vertex_name, g));
         boost::write_graphml(file, g, dp);
-    } catch (const std::exception &e) {
-        std::cerr << "Błąd podczas wczytywania grafu: " << e.what() <<
-        std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Błąd podczas wczytywania grafu: " << e.what()
+                  << std::endl;
         return false;
     }
     return true;
 }
 
-int addNode(Graph &g, const std::string &name) {
+int addNode(Graph& g, const std::string& name) {
     auto v = add_vertex(g);
     auto vertex_name_map = get(boost::vertex_name, g);
     vertex_name_map[v] = name;
     return v;
 }
 
-void addEdge(Graph &g, size_t source, size_t target) {
+void addEdge(Graph& g, size_t source, size_t target) {
     if (source >= num_vertices(g) || target >= num_vertices(g)) {
         throw std::invalid_argument("Invalid source or target node id");
     }
     boost::add_edge(source, target, g);
 }
 
-void removeNode(Graph &g, size_t node) {
+void removeNode(Graph& g, size_t node) {
     if (node >= num_vertices(g)) {
         throw std::invalid_argument("Invalid node id");
     }
@@ -135,7 +135,7 @@ void removeNode(Graph &g, size_t node) {
     remove_vertex(node, g);
 }
 
-void removeEdge(Graph &g, size_t source, size_t target) {
+void removeEdge(Graph& g, size_t source, size_t target) {
     if (source >= num_vertices(g) || target >= num_vertices(g)) {
         throw std::invalid_argument("Invalid source or target node id");
     }
