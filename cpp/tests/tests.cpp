@@ -1,5 +1,5 @@
-#include <catch2/catch_test_macros.hpp>
 #include "math.hpp"
+#include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("MathTest Add", "[Math]") {
     CHECK(add(1, 2) == 3);

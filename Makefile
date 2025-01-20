@@ -28,3 +28,8 @@ py_setup:
 run:
 	cd python && \
 	pdm run python -m src.graph_viewer.main
+
+format:
+	cd cpp && \
+	find . -type f \( -iname "*.cpp" -o -iname "*.hpp" \) -not -path "build/*" | xargs clang-format -i --style=file
+

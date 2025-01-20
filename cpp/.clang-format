@@ -1,0 +1,7 @@
+# Use LLVM as the base style
+BasedOnStyle: LLVM
+
+
+IndentWidth: 4               # Use 4 spaces for indentation
+TabWidth: 4                  # Use 4 spaces for tab width
+UseTab: Never                # Never use tabs, only spaces
