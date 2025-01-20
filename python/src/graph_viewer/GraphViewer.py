@@ -1,10 +1,18 @@
+## @file GraphViewer.py
+# @brief A class to visualize and interact with graphs using a GUI.
+
 import tkinter as tk
 from tkinter import filedialog
 from graphs import Graph, loadGraph, saveGraph, calculateLayout
 
-
 class GraphViewer:
+    """!
+    A class to visualize and interact with graphs using a GUI.
+    """
     def __init__(self):
+        """!
+        Constructor to initialize the GraphViewer.
+        """
         self.plugin_path = "../cpp/app/plugins/dist/libplugin_circular.so"
         self.canva_size = (1000, 700)
         self.coordinates = (100, 100)
@@ -88,9 +96,15 @@ class GraphViewer:
         self.window.bind("<Delete>", lambda event: self.delete_vertices())
 
     def start(self):
+        """!
+        Start the main loop of the Tkinter window.
+        """
         self.window.mainloop()
 
     def load_plugin(self):
+        """!
+        Load a plugin for graph layout calculation.
+        """
         self.plugin_path = filedialog.askopenfilename(title="Choose plugin")
         self.vertices_coordinates = calculateLayout(
             self.graph, self.plugin_path
@@ -98,6 +112,9 @@ class GraphViewer:
         self.draw()
 
     def open_graph(self):
+        """!
+        Open and load a graph from a file.
+        """
         self.graph_path = filedialog.askopenfilename(title="Choose graph")
         self.graph = loadGraph(self.graph_path)
         self.vertices = self.graph.getVerticesData()
@@ -108,6 +125,9 @@ class GraphViewer:
         self.draw()
 
     def create_new_graph(self):
+        """!
+        Create a new graph and save it to a file.
+        """
         new_graph_path = filedialog.asksaveasfilename(
             title="Enter new graph name"
         )
@@ -121,16 +141,27 @@ class GraphViewer:
                 print(f"Error: {e}")
 
     def zoom_in(self):
+        """!
+        Zoom in the graph view.
+        """
         self.scale += 10
         self.coordinates = (self.coordinates[0] - 5, self.coordinates[1] - 5)
         self.draw()
 
     def zoom_out(self):
+        """!
+        Zoom out the graph view.
+        """
         self.scale -= 10
         self.coordinates = (self.coordinates[0] + 5, self.coordinates[1] + 5)
         self.draw()
 
     def on_scroll(self, event):
+        """!
+        Handle mouse scroll events for zooming.
+        
+        @param event The mouse event.
+        """
         if event.delta != 0:
             if event.delta > 0:
                 self.scale += 10
@@ -143,10 +174,20 @@ class GraphViewer:
                 self.zoom_out()
 
     def start_move(self, event):
+        """!
+        Start moving the entire graph view.
+        
+        @param event The mouse event.
+        """
         self.mouse_position = (event.x, event.y)
         self.temp_coordinates = self.coordinates
 
     def move(self, event):
+        """!
+        Move the entire graph view.
+        
+        @param event The mouse event.
+        """
         x_move = event.x - self.mouse_position[0]
         y_move = event.y - self.mouse_position[1]
         self.coordinates = (
@@ -156,6 +197,11 @@ class GraphViewer:
         self.draw()
 
     def start_select(self, event):
+        """!
+        Start selecting vertices.
+        
+        @param event The mouse event.
+        """
         self.temp_coordinates = (event.x, event.y)
         self.canva.create_rectangle(
             self.temp_coordinates[0],
@@ -166,6 +212,11 @@ class GraphViewer:
         )
 
     def select(self, event):
+        """!
+        Select vertices by dragging the mouse.
+        
+        @param event The mouse event.
+        """
         self.draw()
         self.canva.create_rectangle(
             self.temp_coordinates[0],
@@ -176,6 +227,11 @@ class GraphViewer:
         )
 
     def end_select(self, event):
+        """!
+        End the selection of vertices.
+        
+        @param event The mouse event.
+        """
         self.selected_vertices = []
         for vertice in self.vertices_coordinates:
             x = self.vertices_coordinates[vertice][0] * self.scale
@@ -192,6 +248,11 @@ class GraphViewer:
         self.draw()
 
     def start_move_vertice(self, event):
+        """!
+        Start moving a single vertice.
+        
+        @param event The mouse event.
+        """
         for vertice in self.vertices_coordinates:
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
@@ -209,6 +270,11 @@ class GraphViewer:
                 self.vertice_moving = vertice
 
     def move_vertice(self, event):
+        """!
+        Move a single vertice.
+        
+        @param event The mouse event.
+        """
         if self.vertice_moving is not None:
             self.vertices_coordinates[self.vertice_moving] = (
                 (-self.coordinates[0] + event.x) / self.scale,
@@ -217,9 +283,17 @@ class GraphViewer:
             self.draw()
 
     def end_move_vertice(self, event):
+        """!
+        End moving a single vertice.
+        
+        @param event The mouse event.
+        """
         self.vertice_moving = None
 
     def add_vertice(self):
+        """!
+        Add a new vertice to the graph.
+        """
         new_vertice_window = tk.Frame(
             self.window, relief="raised", borderwidth=2
         )
@@ -266,12 +340,18 @@ class GraphViewer:
         close_button.pack()
 
     def add_edge(self):
+        """!
+        Add an edge between two vertices.
+        """
         val1 = self.edge_node1_entry.get()
         val2 = self.edge_node2_entry.get()
         if val1 and val1 != "" and val2 and val2 != "":
             self.edges_list.insert(tk.END, (int(val1), int(val2)))
 
     def save_new_vertice_and_edges(self):
+        """!
+        Save the new vertice and its edges to the graph.
+        """
         if self.node_data_entry.get() and self.node_data_entry.get() != "":
             self.graph.addNode(self.node_data_entry.get())
         for edge in set(self.edges_list.get(0, tk.END)):
@@ -285,6 +365,9 @@ class GraphViewer:
         self.draw()
 
     def delete_vertices(self):
+        """!
+        Delete selected vertices from the graph.
+        """
         # updating vertices
         for vertice in self.selected_vertices:
             self.graph.removeNode(vertice)
@@ -300,6 +383,9 @@ class GraphViewer:
         # here should be cpp function saving updated graph
 
     def group_vertices(self):
+        """!
+        Group selected vertices into a single vertice.
+        """
         new_data = []
 
         # updating vertices
@@ -332,6 +418,9 @@ class GraphViewer:
         self.draw()
 
     def save_graph(self):
+        """!
+        Save the current graph to a file.
+        """
         if self.graph_path != "":
             try:
                 saveGraph(self.graph, self.graph_path)
@@ -343,6 +432,9 @@ class GraphViewer:
             self.message_label.config(text="First create file", fg="red")
 
     def draw(self):
+        """!
+        Draw the graph on the canvas.
+        """
         self.canva.delete("all")
         for edge in self.edges:
             edge_start = self.vertices_coordinates.get(edge[0])
@@ -366,6 +458,12 @@ class GraphViewer:
             self.write_text(x, y, text)
 
     def draw_line(self, start, end):
+        """!
+        Draw a line (edge) between two points.
+        
+        @param start The starting point of the line.
+        @param end The ending point of the line.
+        """
         xs = self.coordinates[0] + start[0]
         xe = self.coordinates[0] + end[0]
         ys = self.coordinates[1] + start[1]
@@ -376,6 +474,13 @@ class GraphViewer:
         )
 
     def draw_circle(self, x, y, alternative_color=False):
+        """!
+        Draw a circle (vertice) at a given position.
+        
+        @param x The x-coordinate of the circle.
+        @param y The y-coordinate of the circle.
+        @param alternative_color Whether to use an alternative color.
+        """
         xs = self.coordinates[0] + (x - self.vertice_size / 2)
         xe = self.coordinates[0] + (x + self.vertice_size / 2)
         ys = self.coordinates[1] + (y - self.vertice_size / 2)
@@ -395,6 +500,13 @@ class GraphViewer:
             )
 
     def write_text(self, x, y, text):
+        """!
+        Write text at a given position.
+        
+        @param x The x-coordinate of the text.
+        @param y The y-coordinate of the text.
+        @param text The text to be displayed.
+        """
         x = self.coordinates[0] + x
         y = self.coordinates[1] + y
         self.canva.create_text(
