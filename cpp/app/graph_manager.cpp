@@ -28,10 +28,6 @@
  * @return float
  */
 
-using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-                                    VertexProperty>;
-
 namespace GraphManager {
 
 std::unordered_map<size_t, std::string> getVerticesData(const Graph& g) {
