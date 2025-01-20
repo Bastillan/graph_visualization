@@ -214,7 +214,7 @@ class GraphViewer():
         self.vertices = self.graph.getVerticesData()
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
         self.edges = self.graph.getEdges()
-        self.message_label.config(text="modified", fg="orange")
+        self.message_label.config(text="Modified", fg="orange")
         self.draw()
 
     def delete_vertices(self):
@@ -226,7 +226,7 @@ class GraphViewer():
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
         self.edges = self.graph.getEdges()
         self.selected_vertices = []
-        self.message_label.config(text="modified", fg="orange")
+        self.message_label.config(text="Modified", fg="orange")
         self.draw()
         # here should be cpp function saving updated graph
 
@@ -251,7 +251,7 @@ class GraphViewer():
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
         self.edges = self.graph.getEdges()
         self.selected_vertices = []
-        self.message_label.config(text="modified", fg="orange")
+        self.message_label.config(text="Modified", fg="orange")
         self.draw()
 
     def save_graph(self):
