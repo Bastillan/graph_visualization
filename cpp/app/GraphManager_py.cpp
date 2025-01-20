@@ -10,8 +10,13 @@ PYBIND11_MODULE(graphs, handle) {
 
     py::class_<Graph>(handle, "Graph")
         .def("getVerticesData", &getVerticesData)
-        .def("getEdges", &getEdges);
+        .def("getEdges", &getEdges)
+        .def("addNode", &addNode)
+        .def("addEdge", &addEdge)
+        .def("removeNode", &removeNode)
+        .def("removeEdge", &removeEdge);
     
     handle.def("loadGraph", &loadGraph);
+    //handle.def("saveGraph", &saveGraph);
     handle.def("calculateLayout", &calculateLayout);
 }

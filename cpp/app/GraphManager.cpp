@@ -78,8 +78,9 @@ std::unordered_map<int, std::pair<double, double>> calculateLayout(const Graph& 
     return coordinates;
 }
 
-Graph loadGraph(std::string path) {
+Graph loadGraph(const std::string path) {
     Graph g;
+
     std::ifstream file(path);
     if (!file.is_open()) {
         std::cerr << "Nie udało się otworzyć pliku graph.graphml!" << std::endl;
@@ -107,8 +108,59 @@ Graph loadGraph(std::string path) {
 
     return g;
 }
+/*
+bool saveGraph(const Graph& g, const std::string path) {
+    std::ofstream file(path);
+    if (!file.is_open()) {
+        std::cerr << "Nie udało się otworzyć  pliku graph.graphml!" << std::endl;
+        return false;
+    }
+
+    try {
+        boost::dynamic_properties dp;
+        dp.property("name", get(boost::vertex_name, g));
+        boost::write_graphml(file, g, dp);
+    } catch (const std::exception &e) {
+        std::cerr << "Błąd podczas wczytywania grafu: " << e.what() << std::endl;
+        return false;
+    }
+    return true;
+}*/
 
 
+int addNode(Graph& g, const std::string& name) {
+    auto v = add_vertex(g);
+    auto vertex_name_map = get(boost::vertex_name, g);
+    vertex_name_map[v] = name;
+    return v;
+}
+
+void addEdge(Graph& g, int source, int target) {
+    //if (source >= num_vertices(g) || target >= num_vertices(g)) {
+    //    throw std::invalid_argument("Invalid source or target node id");
+    //}
+    boost::add_edge(source, target, g);
+}
+
+void removeNode(Graph& g, int node) {
+    //if (node >= num_vertices(g)) {
+    //    throw std::invalid_argument("Invalid node id");
+    //}
+    clear_vertex(node, g);
+    remove_vertex(node, g);
+}
+
+void removeEdge(Graph& g, int source, int target) {
+    //if (source >= num_vertices(g) || target >= num_vertices(g)) {
+    //    throw std::invalid_argument("Invalid source or target node id");
+    //}
+    auto edge_pair = boost::edge(source, target, g);
+    if (edge_pair.second) {
+        boost::remove_edge(edge_pair.first, g);
+    } else {
+        throw std::invalid_argument("Edge does not exist");    
+    }
+}
 
 //To do
 //- dane w load graph
