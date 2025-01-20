@@ -6,10 +6,6 @@
 #include <unordered_map>
 #include <vector>
 
-using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-                                    VertexProperty>;
-
 namespace PluginCircular {
 
 class GraphCalculate : public PluginInterface::MyPluginApi {
