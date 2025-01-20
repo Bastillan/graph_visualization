@@ -29,3 +29,5 @@ format = [
     "black>=24.10.0",
 ]
 
+[tool.black]
+line-length = 79
