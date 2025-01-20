@@ -29,7 +29,6 @@
  */
 
 using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
-
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS, VertexProperty>;
 
 std::unordered_map<int, std::string> getVerticesData(const Graph& g) {
@@ -55,25 +54,12 @@ std::vector<std::pair<int, int>> getEdges(const Graph& g) {
 }
 
 std::unordered_map<int, std::pair<double, double>> calculateLayout(const Graph& g, std::string plugin_path) {
-    
-    //boost::dll::fs::path plugin_path = "../cpp/app/plugins/libplugin.so";
     boost::dll::fs::path plug_path = plugin_path;
-
-
-    boost::dll::shared_library lib(plug_path);             // argv[1] contains path to directory with our plugin library
-
+    boost::dll::shared_library lib(plug_path);
     auto create_plugin = lib.get<my_plugin_api*()>("create_plugin");
 
     std::shared_ptr<my_plugin_api> plugin(create_plugin());
     auto coordinates = plugin->calculate_graph_coordinates(g);
-    
-    for (const auto& entry : coordinates) {
-        int key = entry.first;  // Klucz
-        double x = entry.second.first;  // Pierwsza wartość pary
-        double y = entry.second.second; // Druga wartość pary
-
-        std::cout << "Key: " << key << ", Value: (" << x << ", " << y << ")" << std::endl;
-    }
 
     return coordinates;
 }
@@ -96,14 +82,6 @@ Graph loadGraph(const std::string path) {
     } catch (const std::exception &e) {
         std::cerr << "Błąd podczas wczytywania grafu: " << e.what() << std::endl;
         return 1;
-    }
-
-    // Wyświetlenie liczby wierzchołków i krawędzi
-    
-
-    auto vertex_name_map = get(boost::vertex_name, g);
-    for (auto [vi, vi_end] = vertices(g); vi != vi_end; ++vi) {
-        std::cout << "Vertex " << *vi << ": name = " << vertex_name_map[*vi] << std::endl;
     }
 
     return g;
@@ -161,8 +139,4 @@ void removeEdge(Graph& g, int source, int target) {
         throw std::invalid_argument("Edge does not exist");    
     }
 }
-
-//To do
-//- dane w load graph
-//- calculate positions
 
