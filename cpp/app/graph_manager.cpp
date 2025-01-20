@@ -1,6 +1,6 @@
 /**
  * @file graph_manager.cpp
- * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (michal.pienkos.stud@pw.edu.pl)
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (jedrzej.kedzierski.stud@pw.edu.pl)
  * @brief Implementation of graph management functions.
  * @version 0.1
  * @date 2025-01-20
@@ -46,8 +46,8 @@ std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
     std::vector<std::pair<size_t, size_t>> edges_list;
 
     for (auto [ei, ei_end] = edges(g); ei != ei_end; ++ei) {
-        int source = boost::source(*ei, g);
-        int target = boost::target(*ei, g);
+        size_t source = boost::source(*ei, g);
+        size_t target = boost::target(*ei, g);
         edges_list.emplace_back(source, target);
     }
     return edges_list;
@@ -59,7 +59,7 @@ std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
  * @param plugin_path Path to the plugin.
  * @return Map of vertex indices to their coordinates.
  */
-std::unordered_map<int, std::pair<double, double>>
+std::unordered_map<size_t, std::pair<double, double>>
 calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
     boost::dll::shared_library lib(plug_path);
