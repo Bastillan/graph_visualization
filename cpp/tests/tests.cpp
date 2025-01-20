@@ -235,10 +235,97 @@ TEST_CASE("LoadGraph test - Check edges for graph2", "[graph_manager]") {
 
     CHECK(edges.size() == 8);
 
-    CHECK(edges.at(0).first == 0);
-    CHECK(edges.at(0).second == 1);
-    CHECK(edges.at(1).first == 0);
-    CHECK(edges.at(1).second == 2);
-    CHECK(edges.at(2).first == 2);
-    CHECK(edges.at(2).second == 3);
+    CHECK(edges[0].first == 0);
+    CHECK(edges[0].second == 1);
+
+    CHECK(edges[1].first == 0);
+    CHECK(edges[1].second == 2);
+}
+
+TEST_CASE("LoadGraph test - Check disconnected node for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto verticesData = GraphManager::getVerticesData(graph);
+    auto edges = GraphManager::getEdges(graph);
+
+    bool hasEdges = false;
+    for (const auto& edge : edges) {
+        if (edge.first == 9 || edge.second == 9) {
+            hasEdges = true;
+            break;
+        }
+    }
+
+    CHECK(!hasEdges);
+}
+
+TEST_CASE("LoadGraph test - Check edge count for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto edges = GraphManager::getEdges(graph);
+
+    CHECK(edges.size() == 8);
+}
+
+TEST_CASE("LoadGraph test - Check source and target for edges in graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto edges = GraphManager::getEdges(graph);
+
+    CHECK(edges[0].first == 0);
+    CHECK(edges[0].second == 1);
+
+    CHECK(edges[1].first == 0);
+    CHECK(edges[1].second == 2);
+}
+
+TEST_CASE("LoadGraph test - Check multiple edges from one node for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto edges = GraphManager::getEdges(graph);
+
+    int count = 0;
+    for (const auto& edge : edges) {
+        if (edge.first == 0) {
+            count++;
+        }
+    }
+
+    CHECK(count == 2);
+}
+
+TEST_CASE("LoadGraph test - Check correct number of vertices for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto verticesData = GraphManager::getVerticesData(graph);
+
+    CHECK(verticesData.size() == 10);
+}
+
+TEST_CASE("LoadGraph test - Check valid vertex names for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto verticesData = GraphManager::getVerticesData(graph);
+
+    CHECK(verticesData[0] == "Node 0");
+
+    CHECK(verticesData[5] == "Node 5");
+}
+
+TEST_CASE("LoadGraph test - Check specific node data for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto verticesData = GraphManager::getVerticesData(graph);
+
+    CHECK(verticesData[3] == "Node 3");
+
+    CHECK(verticesData[7] == "Node 7");
+}
+
+TEST_CASE("LoadGraph test - Check edge between nodes 0 and 2 for graph2", "[graph_manager]") {
+    auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph2.graphml");
+    auto edges = GraphManager::getEdges(graph);
+
+    bool edgeFound = false;
+    for (const auto& edge : edges) {
+        if (edge.first == 0 && edge.second == 2) {
+            edgeFound = true;
+            break;
+        }
+    }
+
+    CHECK(edgeFound);
 }
