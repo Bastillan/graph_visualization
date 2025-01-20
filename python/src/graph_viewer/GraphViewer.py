@@ -66,9 +66,12 @@ class GraphViewer():
         self.window.mainloop()
 
     def load_plugin(self):
-        self.plugin_path = filedialog.askopenfilename(
-        title="Choose plugin",
-        )
+        self.plugin_path = filedialog.askopenfilename(title="Choose plugin")
+        self.graph = loadGraph(self.graph_path)
+        self.vertices = self.graph.getVerticesData()
+        self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
+        self.edges = self.graph.getEdges()
+        self.draw()
 
     def open_graph(self):
         self.graph_path = filedialog.askopenfilename(title="Choose graph")
