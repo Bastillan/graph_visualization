@@ -67,10 +67,7 @@ class GraphViewer():
 
     def load_plugin(self):
         self.plugin_path = filedialog.askopenfilename(title="Choose plugin")
-        self.graph = loadGraph(self.graph_path)
-        self.vertices = self.graph.getVerticesData()
         self.vertices_coordinates = calculateLayout(self.graph, self.plugin_path)
-        self.edges = self.graph.getEdges()
         self.draw()
 
     def open_graph(self):
@@ -149,15 +146,12 @@ class GraphViewer():
 
     def start_move_vertice(self, event):
         for vertice in self.vertices_coordinates:
-            print(vertice, self.vertices_coordinates[vertice])
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
             xs = self.coordinates[0] + (x-self.vertice_size/2)
             xe = self.coordinates[0] + (x+self.vertice_size/2)
             ys = self.coordinates[1] + (y-self.vertice_size/2)
             ye = self.coordinates[1] + (y+self.vertice_size/2)
-            print(xs, xe, ys, ye, event.x, event.y, self.vertice_moving, vertice)
-            print(xs < event.x and xe > event.x and ys < event.y and ye > event.y and self.vertice_moving is None)
             if xs < event.x and xe > event.x and ys < event.y and ye > event.y and self.vertice_moving is None:
                 self.vertice_moving = vertice
 
