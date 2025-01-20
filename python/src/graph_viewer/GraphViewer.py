@@ -18,7 +18,7 @@ class GraphViewer():
         self.vertices_coordinates = []
         self.edges=[]
         self.graph = []
-        self.marked_vertcies = []
+        self.selected_vertices = []
 
         self.window = tk.Tk()
         self.window.title("Graph viewer")
@@ -34,11 +34,11 @@ class GraphViewer():
         self.menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.window.config(menu=self.menu_bar)
 
-        self.new_node_button = tk.Button(self.window, text="Add node")
+        self.new_node_button = tk.Button(self.window, text="Add node", command=self.add_vertice)
         self.new_node_button.grid(column=0, row=0)
-        self.delete_node_button = tk.Button(self.window, text="Delete node")
+        self.delete_node_button = tk.Button(self.window, text="Delete nodes", command=self.delete_vertices)
         self.delete_node_button.grid(column=1, row=0)
-        self.group_nodes_button = tk.Button(self.window, text="Group nodes")
+        self.group_nodes_button = tk.Button(self.window, text="Group nodes", command=self.group_vertices)
         self.group_nodes_button.grid(column=2, row=0)
         self.zoom_in_button = tk.Button(self.window, text="+", command=self.zoom_in)
         self.zoom_in_button.grid(column=3, row=0)
@@ -48,9 +48,9 @@ class GraphViewer():
         self.canva.grid(column=0, row=1, columnspan=5)
 
         self.mouse_position = (0, 0)
-        self.canva.bind("<Button-1>", self.start_mark)
-        self.canva.bind("<B1-Motion>", self.mark)
-        self.canva.bind("<ButtonRelease-1>", self.end_mark)
+        self.canva.bind("<Button-1>", self.start_select)
+        self.canva.bind("<B1-Motion>", self.select)
+        self.canva.bind("<ButtonRelease-1>", self.end_select)
         self.canva.bind("<Button-2>", self.start_move)
         self.canva.bind("<B2-Motion>", self.move)
         self.canva.bind("<MouseWheel>", self.on_scroll)
@@ -116,16 +116,16 @@ class GraphViewer():
         self.coordinates = (self.temp_coordinates[0]+x_move, self.temp_coordinates[1]+y_move)
         self.draw()
 
-    def start_mark(self, event):
+    def start_select(self, event):
         self.temp_coordinates = (event.x, event.y)
         self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
 
-    def mark(self, event):
+    def select(self, event):
         self.draw()
         self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
 
-    def end_mark(self, event):
-        self.marked_vertcies = []
+    def end_select(self, event):
+        self.selected_vertices = []
         for vertice in self.vertices_coordinates:
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
@@ -137,7 +137,71 @@ class GraphViewer():
             yms = self.temp_coordinates[1]
 
             if xs > xms and xe < event.x and ys > yms and ye < event.y:
-                self.marked_vertcies.append(vertice)
+                self.selected_vertices.append(vertice)
+        self.draw()
+
+    def add_vertice(self):
+        # here should be cpp function saving updated graph
+        pass
+
+    def delete_vertices(self):
+        new_vertices = {}
+        new_vertices_coordinates = {}
+        new_edges = []
+        # updating vertices
+        for vertice in self.vertices:
+            if vertice not in self.selected_vertices:
+                new_vertices[vertice] = self.vertices[vertice]
+        # updating vertices coordinates
+        for vertice in self.vertices_coordinates:
+            if vertice not in self.selected_vertices:
+                new_vertices_coordinates[vertice] = self.vertices_coordinates[vertice]
+        # updating edges
+        for edge in self.edges:
+            if edge[0] not in self.selected_vertices and edge[1] not in self.selected_vertices:
+                new_edges.append(edge)
+        # saving new parameters
+        self.vertices = new_vertices
+        self.vertices_coordinates = new_vertices_coordinates
+        self.edges = new_edges
+        self.selected_vertices = []
+        self.draw()
+        # here should be cpp function saving updated graph
+
+    def group_vertices(self):
+        new_vertices = {}
+        new_vertices_coordinates = {}
+        new_edges = []
+        new_data = []
+        # updating vertices
+        for vertice in self.vertices:
+            if vertice not in self.selected_vertices:
+                new_vertices[vertice] = self.vertices[vertice]
+            else:
+                new_data.append(self.vertices[vertice])
+        new_vertice = max(new_vertices) + 1
+        new_vertices[new_vertice] = ", ".join(new_data)
+        # updating edges
+        print(self.selected_vertices)
+        for edge in self.edges:
+            if edge[0] not in self.selected_vertices and edge[1] not in self.selected_vertices:
+                new_edges.append(edge)
+            elif edge[0] in self.selected_vertices and edge[1] not in self.selected_vertices:
+                new_edges.append((edge[1], new_vertice))
+            elif edge[1] in self.selected_vertices and edge[0] not in self.selected_vertices:
+                new_edges.append((edge[0], new_vertice))
+        # updating vertices coordinates - delete this after implementing saving updated graph function
+        for vertice in self.vertices_coordinates:
+            if vertice not in self.selected_vertices:
+                new_vertices_coordinates[vertice] = self.vertices_coordinates[vertice]
+        new_vertices_coordinates[new_vertice] = (1, 1)
+        # saving new parameters
+        self.vertices = new_vertices
+        self.vertices_coordinates = new_vertices_coordinates
+        self.edges = new_edges
+        print(self.edges)
+        # here should be cpp function saving updated graph
+        # self.vertices_coordinates = calculateLayout(self.graph) - uncomment this after implementing saving updated graph function
         self.draw()
 
     def draw(self):
@@ -154,7 +218,7 @@ class GraphViewer():
             text = self.vertices[vertice]
             x = x * self.scale
             y = y * self.scale
-            if vertice not in self.marked_vertcies:
+            if vertice not in self.selected_vertices:
                 self.draw_circle(x, y)
             else:
                 self.draw_circle(x, y, True)
