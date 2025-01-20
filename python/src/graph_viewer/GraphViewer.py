@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import filedialog
 from graphs import *
 
-class GraphViewer():
+
+class GraphViewer:
     def __init__(self):
-        self.plugin_path="../cpp/app/plugins/dist/libplugin_circular.so"
+        self.plugin_path = "../cpp/app/plugins/dist/libplugin_circular.so"
         self.canva_size = (1000, 700)
         self.coordinates = (100, 100)
         self.vertice_size = 60
@@ -12,14 +13,14 @@ class GraphViewer():
         self.edge_width = 2
         self.edge_color = "red"
         self.text_size = 10
-        self.text_color="black"
+        self.text_color = "black"
         self.scale = 200
         self.vertices = {}
         self.vertices_coordinates = {}
-        self.edges=[]
+        self.edges = []
         self.graph = Graph()
         self.selected_vertices = []
-        self.graph_path=""
+        self.graph_path = ""
 
         self.window = tk.Tk()
         self.window.title("Graph viewer")
@@ -35,11 +36,17 @@ class GraphViewer():
         self.menu_bar.add_cascade(label="File", menu=self.file_menu)
         self.window.config(menu=self.menu_bar)
 
-        self.new_node_button = tk.Button(self.window, text="Add node", command=self.add_vertice)
+        self.new_node_button = tk.Button(
+            self.window, text="Add node", command=self.add_vertice
+        )
         self.new_node_button.grid(column=0, row=0)
-        self.delete_node_button = tk.Button(self.window, text="Delete nodes", command=self.delete_vertices)
+        self.delete_node_button = tk.Button(
+            self.window, text="Delete nodes", command=self.delete_vertices
+        )
         self.delete_node_button.grid(column=1, row=0)
-        self.group_nodes_button = tk.Button(self.window, text="Group nodes", command=self.group_vertices)
+        self.group_nodes_button = tk.Button(
+            self.window, text="Group nodes", command=self.group_vertices
+        )
         self.group_nodes_button.grid(column=2, row=0)
         self.zoom_in_button = tk.Button(self.window, text="+", command=self.zoom_in)
         self.zoom_in_button.grid(column=3, row=0)
@@ -47,9 +54,11 @@ class GraphViewer():
         self.zoom_out_button.grid(column=4, row=0)
         self.save_button = tk.Button(self.window, text="Save", command=self.save_graph)
         self.save_button.grid(column=5, row=0)
-        self.message_label =tk.Label(self.window, text="", width=20)
+        self.message_label = tk.Label(self.window, text="", width=20)
         self.message_label.grid(column=6, row=0)
-        self.canva = tk.Canvas(self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white")
+        self.canva = tk.Canvas(
+            self.window, width=self.canva_size[0], height=self.canva_size[1], bg="white"
+        )
         self.canva.grid(column=0, row=1, columnspan=7)
 
         self.mouse_position = (0, 0)
@@ -66,7 +75,6 @@ class GraphViewer():
         self.canva.bind("<Button-4>", self.on_scroll)
         self.canva.bind("<Button-5>", self.on_scroll)
         self.window.bind("<Delete>", lambda event: self.delete_vertices())
-
 
     def start(self):
         self.window.mainloop()
@@ -97,12 +105,12 @@ class GraphViewer():
 
     def zoom_in(self):
         self.scale += 10
-        self.coordinates = (self.coordinates[0]-5, self.coordinates[1]-5)
+        self.coordinates = (self.coordinates[0] - 5, self.coordinates[1] - 5)
         self.draw()
 
     def zoom_out(self):
         self.scale -= 10
-        self.coordinates = (self.coordinates[0]+5, self.coordinates[1]+5)
+        self.coordinates = (self.coordinates[0] + 5, self.coordinates[1] + 5)
         self.draw()
 
     def on_scroll(self, event):
@@ -122,28 +130,43 @@ class GraphViewer():
         self.temp_coordinates = self.coordinates
 
     def move(self, event):
-        x_move = event.x-self.mouse_position[0]
-        y_move = event.y-self.mouse_position[1]
-        self.coordinates = (self.temp_coordinates[0]+x_move, self.temp_coordinates[1]+y_move)
+        x_move = event.x - self.mouse_position[0]
+        y_move = event.y - self.mouse_position[1]
+        self.coordinates = (
+            self.temp_coordinates[0] + x_move,
+            self.temp_coordinates[1] + y_move,
+        )
         self.draw()
 
     def start_select(self, event):
         self.temp_coordinates = (event.x, event.y)
-        self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
+        self.canva.create_rectangle(
+            self.temp_coordinates[0],
+            self.temp_coordinates[1],
+            event.x,
+            event.y,
+            outline="green",
+        )
 
     def select(self, event):
         self.draw()
-        self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
+        self.canva.create_rectangle(
+            self.temp_coordinates[0],
+            self.temp_coordinates[1],
+            event.x,
+            event.y,
+            outline="green",
+        )
 
     def end_select(self, event):
         self.selected_vertices = []
         for vertice in self.vertices_coordinates:
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
-            xs = self.coordinates[0] + (x-self.vertice_size/2)
-            xe = self.coordinates[0] + (x+self.vertice_size/2)
-            ys = self.coordinates[1] + (y-self.vertice_size/2)
-            ye = self.coordinates[1] + (y+self.vertice_size/2)
+            xs = self.coordinates[0] + (x - self.vertice_size / 2)
+            xe = self.coordinates[0] + (x + self.vertice_size / 2)
+            ys = self.coordinates[1] + (y - self.vertice_size / 2)
+            ye = self.coordinates[1] + (y + self.vertice_size / 2)
             xms = self.temp_coordinates[0]
             yms = self.temp_coordinates[1]
 
@@ -155,16 +178,25 @@ class GraphViewer():
         for vertice in self.vertices_coordinates:
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
-            xs = self.coordinates[0] + (x-self.vertice_size/2)
-            xe = self.coordinates[0] + (x+self.vertice_size/2)
-            ys = self.coordinates[1] + (y-self.vertice_size/2)
-            ye = self.coordinates[1] + (y+self.vertice_size/2)
-            if xs < event.x and xe > event.x and ys < event.y and ye > event.y and self.vertice_moving is None:
+            xs = self.coordinates[0] + (x - self.vertice_size / 2)
+            xe = self.coordinates[0] + (x + self.vertice_size / 2)
+            ys = self.coordinates[1] + (y - self.vertice_size / 2)
+            ye = self.coordinates[1] + (y + self.vertice_size / 2)
+            if (
+                xs < event.x
+                and xe > event.x
+                and ys < event.y
+                and ye > event.y
+                and self.vertice_moving is None
+            ):
                 self.vertice_moving = vertice
 
     def move_vertice(self, event):
         if self.vertice_moving is not None:
-            self.vertices_coordinates[self.vertice_moving] = ((-self.coordinates[0] + event.x)/self.scale, (-self.coordinates[1] + event.y)/self.scale)
+            self.vertices_coordinates[self.vertice_moving] = (
+                (-self.coordinates[0] + event.x) / self.scale,
+                (-self.coordinates[1] + event.y) / self.scale,
+            )
             self.draw()
 
     def end_move_vertice(self, event):
@@ -172,8 +204,12 @@ class GraphViewer():
 
     def add_vertice(self):
         new_vertice_window = tk.Frame(self.window, relief="raised", borderwidth=2)
-        new_vertice_window.place(relx=0.5, rely=0.5, anchor="center", width=300, height=450)
-        vertice_window_label = tk.Label(new_vertice_window, text="Enter new vertice data")
+        new_vertice_window.place(
+            relx=0.5, rely=0.5, anchor="center", width=300, height=450
+        )
+        vertice_window_label = tk.Label(
+            new_vertice_window, text="Enter new vertice data"
+        )
         vertice_window_label.pack(pady=10)
         vertice_data_label = tk.Label(new_vertice_window, text="Vertice data")
         vertice_data_label.pack()
@@ -195,15 +231,19 @@ class GraphViewer():
         self.edges_list = tk.Listbox(new_vertice_window)
         self.edges_list.pack()
 
-        save_button = tk.Button(new_vertice_window, text="Save", command = self.save_new_vertice_and_edges)
+        save_button = tk.Button(
+            new_vertice_window, text="Save", command=self.save_new_vertice_and_edges
+        )
         save_button.pack()
-        close_button = tk.Button(new_vertice_window, text="Close", command=new_vertice_window.destroy)
+        close_button = tk.Button(
+            new_vertice_window, text="Close", command=new_vertice_window.destroy
+        )
         close_button.pack()
 
     def add_edge(self):
         val1 = self.edge_node1_entry.get()
         val2 = self.edge_node2_entry.get()
-        if val1 and val1!="" and val2 and val2!="":
+        if val1 and val1 != "" and val2 and val2 != "":
             self.edges_list.insert(tk.END, (int(val1), int(val2)))
 
     def save_new_vertice_and_edges(self):
@@ -241,9 +281,15 @@ class GraphViewer():
 
         # updating edges
         for edge in self.edges:
-            if edge[0] in self.selected_vertices and edge[1] not in self.selected_vertices:
+            if (
+                edge[0] in self.selected_vertices
+                and edge[1] not in self.selected_vertices
+            ):
                 self.graph.addEdge(edge[1], new_vertice)
-            elif edge[1] in self.selected_vertices and edge[0] not in self.selected_vertices:
+            elif (
+                edge[1] in self.selected_vertices
+                and edge[0] not in self.selected_vertices
+            ):
                 self.graph.addEdge(edge[0], new_vertice)
 
         # saving new parameters
@@ -270,8 +316,8 @@ class GraphViewer():
         for edge in self.edges:
             edge_start = self.vertices_coordinates.get(edge[0])
             edge_end = self.vertices_coordinates.get(edge[1])
-            edge_start = (edge_start[0]*self.scale, edge_start[1]*self.scale)
-            edge_end = (edge_end[0]*self.scale, edge_end[1]*self.scale)
+            edge_start = (edge_start[0] * self.scale, edge_start[1] * self.scale)
+            edge_end = (edge_end[0] * self.scale, edge_end[1] * self.scale)
             self.draw_line(edge_start, edge_end)
 
         for vertice in self.vertices_coordinates:
@@ -291,19 +337,25 @@ class GraphViewer():
         ys = self.coordinates[1] + start[1]
         ye = self.coordinates[1] + end[1]
 
-        self.canva.create_line(xs, ys, xe, ye, fill=self.edge_color, width=self.edge_width)
+        self.canva.create_line(
+            xs, ys, xe, ye, fill=self.edge_color, width=self.edge_width
+        )
 
     def draw_circle(self, x, y, alternative_color=False):
-        xs = self.coordinates[0] + (x-self.vertice_size/2)
-        xe = self.coordinates[0] + (x+self.vertice_size/2)
-        ys = self.coordinates[1] + (y-self.vertice_size/2)
-        ye = self.coordinates[1] + (y+self.vertice_size/2)
+        xs = self.coordinates[0] + (x - self.vertice_size / 2)
+        xe = self.coordinates[0] + (x + self.vertice_size / 2)
+        ys = self.coordinates[1] + (y - self.vertice_size / 2)
+        ye = self.coordinates[1] + (y + self.vertice_size / 2)
         if alternative_color:
             self.canva.create_oval(xs, ys, xe, ye, fill="green", outline="green")
         else:
-            self.canva.create_oval(xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color)
+            self.canva.create_oval(
+                xs, ys, xe, ye, fill=self.vertice_color, outline=self.vertice_color
+            )
 
     def write_text(self, x, y, text):
         x = self.coordinates[0] + x
         y = self.coordinates[1] + y
-        self.canva.create_text(x, y, text=text, font=("Arial", self.text_size), fill=self.text_color)
+        self.canva.create_text(
+            x, y, text=text, font=("Arial", self.text_size), fill=self.text_color
+        )
