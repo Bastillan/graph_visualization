@@ -60,6 +60,7 @@ class GraphViewer():
         self.canva.bind("<MouseWheel>", self.on_scroll)
         self.canva.bind("<Button-4>", self.on_scroll)
         self.canva.bind("<Button-5>", self.on_scroll)
+        self.window.bind("<Delete>", lambda event: self.delete_vertices())
 
 
     def start(self):
