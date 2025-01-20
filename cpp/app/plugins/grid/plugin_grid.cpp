@@ -1,3 +1,8 @@
+/**
+ * @file plugin_grid.cpp
+ * @brief Plugin for grid-based graph calculations.
+ */
+
 #include "plugin_interface.hpp"
 #include <boost/config.hpp> // for BOOST_SYMBOL_EXPORT
 #include <boost/graph/adjacency_list.hpp>
@@ -8,14 +13,34 @@
 
 namespace PluginGrid {
 
+/**
+ * @class GraphCalculate
+ * @brief Implements grid-based graph calculations.
+ */
 class GraphCalculate : public PluginInterface::MyPluginApi {
   public:
     GraphCalculate() {}
 
+    /**
+     * @brief Returns the name of the plugin.
+     * @return Plugin name.
+     */
     std::string name() const { return "Graph calculations"; }
 
+    /**
+     * @brief Calculates y = a * x + b.
+     * @param x Input value.
+     * @param a Slope.
+     * @param b Intercept.
+     * @return Calculated y value.
+     */
     float y(float x, float a, float b) { return a * x + b; }
 
+    /**
+     * @brief Calculates grid coordinates for the graph vertices.
+     * @param graph Input graph.
+     * @return Map of vertex indices to their coordinates.
+     */
     std::unordered_map<int, std::pair<double, double>>
     calculateGraphCoordinates(Graph graph) {
         using namespace boost;

@@ -1,3 +1,8 @@
+/**
+ * @file graph_manager_py.cpp
+ * @brief Python bindings for graph management functions.
+ */
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -6,6 +11,9 @@
 namespace py = pybind11;
 using namespace GraphManager;
 
+/**
+ * @brief Python module for graph management.
+ */
 PYBIND11_MODULE(graphs, handle) {
     handle.doc() = "This is the module docs.";
 

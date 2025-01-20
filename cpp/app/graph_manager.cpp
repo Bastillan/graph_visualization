@@ -1,13 +1,12 @@
 /**
- * @file math.cpp
- * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier
- * (jedrzej.kedzierski.stud@pw.edu.pl)
- * @brief Module with basic math operations
+ * @file graph_manager.cpp
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (michal.pienkos.stud@pw.edu.pl)
+ * @brief Implementation of graph management functions.
  * @version 0.1
- * @date 2024-12-04
- *
- * @copyright Copyright (c) 2024
- *
+ * @date 2025-01-20
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 #include "plugin_interface.hpp"
 #include <boost/dll/import.hpp>
@@ -20,16 +19,13 @@
 #include <unordered_map>
 #include <vector>
 
-/**
- * @brief Implements addition
- *
- * @param arg1
- * @param arg2
- * @return float
- */
-
 namespace GraphManager {
 
+/**
+ * @brief Gets the data of the vertices in the graph.
+ * @param g Input graph.
+ * @return Map of vertex indices to their data.
+ */
 std::unordered_map<size_t, std::string> getVerticesData(const Graph& g) {
     std::unordered_map<size_t, std::string> data;
 
@@ -41,6 +37,11 @@ std::unordered_map<size_t, std::string> getVerticesData(const Graph& g) {
     return data;
 }
 
+/**
+ * @brief Gets the edges of the graph.
+ * @param g Input graph.
+ * @return Vector of edges represented as pairs of vertex indices.
+ */
 std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
     std::vector<std::pair<size_t, size_t>> edges_list;
 
@@ -52,6 +53,12 @@ std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
     return edges_list;
 }
 
+/**
+ * @brief Calculates the layout of the graph using a plugin.
+ * @param g Input graph.
+ * @param plugin_path Path to the plugin.
+ * @return Map of vertex indices to their coordinates.
+ */
 std::unordered_map<int, std::pair<double, double>>
 calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
@@ -66,6 +73,11 @@ calculateLayout(const Graph& g, const std::string plugin_path) {
     return coordinates;
 }
 
+/**
+ * @brief Loads a graph from a file.
+ * @param path Path to the graph file.
+ * @return Loaded graph.
+ */
 Graph loadGraph(const std::string path) {
     Graph g;
 
@@ -87,6 +99,12 @@ Graph loadGraph(const std::string path) {
     return g;
 }
 
+/**
+ * @brief Saves a graph to a file.
+ * @param g Graph to save.
+ * @param path Path to the graph file.
+ * @return True if successful, false otherwise.
+ */
 bool saveGraph(Graph& g, const std::string path) {
     std::ofstream file(path);
     if (!file.is_open()) {
@@ -103,6 +121,12 @@ bool saveGraph(Graph& g, const std::string path) {
     return true;
 }
 
+/**
+ * @brief Adds a node to the graph.
+ * @param g Graph to modify.
+ * @param name Name of the new node.
+ * @return Index of the new node.
+ */
 int addNode(Graph& g, const std::string& name) {
     auto v = add_vertex(g);
     auto vertex_name_map = get(boost::vertex_name, g);
@@ -110,6 +134,12 @@ int addNode(Graph& g, const std::string& name) {
     return v;
 }
 
+/**
+ * @brief Adds an edge to the graph.
+ * @param g Graph to modify.
+ * @param source Source vertex index.
+ * @param target Target vertex index.
+ */
 void addEdge(Graph& g, size_t source, size_t target) {
     if (source >= num_vertices(g) || target >= num_vertices(g)) {
         throw std::invalid_argument("Invalid source or target node id");
@@ -117,6 +147,11 @@ void addEdge(Graph& g, size_t source, size_t target) {
     boost::add_edge(source, target, g);
 }
 
+/**
+ * @brief Removes a node from the graph.
+ * @param g Graph to modify.
+ * @param node Index of the node to remove.
+ */
 void removeNode(Graph& g, size_t node) {
     if (node >= num_vertices(g)) {
         throw std::invalid_argument("Invalid node id");
@@ -125,6 +160,12 @@ void removeNode(Graph& g, size_t node) {
     remove_vertex(node, g);
 }
 
+/**
+ * @brief Removes an edge from the graph.
+ * @param g Graph to modify.
+ * @param source Source vertex index.
+ * @param target Target vertex index.
+ */
 void removeEdge(Graph& g, size_t source, size_t target) {
     if (source >= num_vertices(g) || target >= num_vertices(g)) {
         throw std::invalid_argument("Invalid source or target node id");

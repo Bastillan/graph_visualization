@@ -1,3 +1,8 @@
+/**
+ * @file graph_manager.hpp
+ * @brief Header file for graph management functions.
+ */
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -14,16 +19,73 @@ using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
 
 namespace GraphManager {
 
+/**
+ * @brief Loads a graph from a file.
+ * @param path Path to the graph file.
+ * @return Loaded graph.
+ */
 Graph loadGraph(const std::string path);
+
+/**
+ * @brief Saves a graph to a file.
+ * @param g Graph to save.
+ * @param path Path to the graph file.
+ * @return True if successful, false otherwise.
+ */
 bool saveGraph(Graph& g, const std::string path);
+
+/**
+ * @brief Calculates the layout of the graph using a plugin.
+ * @param g Input graph.
+ * @param plugin_path Path to the plugin.
+ * @return Map of vertex indices to their coordinates.
+ */
 std::unordered_map<size_t, std::pair<double, double>>
 calculateLayout(const Graph& g, const std::string plugin_path);
 
+/**
+ * @brief Gets the data of the vertices in the graph.
+ * @param g Input graph.
+ * @return Map of vertex indices to their data.
+ */
 std::unordered_map<size_t, std::string> getVerticesData(const Graph& g);
+
+/**
+ * @brief Gets the edges of the graph.
+ * @param g Input graph.
+ * @return Vector of edges represented as pairs of vertex indices.
+ */
 std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g);
+
+/**
+ * @brief Adds a node to the graph.
+ * @param g Graph to modify.
+ * @param name Name of the new node.
+ * @return Index of the new node.
+ */
 int addNode(Graph& g, const std::string& name);
+
+/**
+ * @brief Adds an edge to the graph.
+ * @param g Graph to modify.
+ * @param source Source vertex index.
+ * @param target Target vertex index.
+ */
 void addEdge(Graph& g, size_t source, size_t target);
+
+/**
+ * @brief Removes a node from the graph.
+ * @param g Graph to modify.
+ * @param node Index of the node to remove.
+ */
 void removeNode(Graph& g, size_t node);
+
+/**
+ * @brief Removes an edge from the graph.
+ * @param g Graph to modify.
+ * @param source Source vertex index.
+ * @param target Target vertex index.
+ */
 void removeEdge(Graph& g, size_t source, size_t target);
 
 } // namespace GraphManager
