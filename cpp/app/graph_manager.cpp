@@ -46,8 +46,8 @@ std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
     std::vector<std::pair<size_t, size_t>> edges_list;
 
     for (auto [ei, ei_end] = edges(g); ei != ei_end; ++ei) {
-        int source = boost::source(*ei, g);
-        int target = boost::target(*ei, g);
+        size_t source = boost::source(*ei, g);
+        size_t target = boost::target(*ei, g);
         edges_list.emplace_back(source, target);
     }
     return edges_list;
