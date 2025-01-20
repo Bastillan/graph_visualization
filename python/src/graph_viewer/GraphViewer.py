@@ -51,8 +51,9 @@ class GraphViewer():
         self.canva.bind("<Button-1>", self.start_select)
         self.canva.bind("<B1-Motion>", self.select)
         self.canva.bind("<ButtonRelease-1>", self.end_select)
-        self.vertice_moving = False
+        self.vertice_moving = None
         self.canva.bind("<Button-3>", self.start_move_vertice)
+        self.canva.bind("<ButtonRelease-3>", self.end_move_vertice)
         self.canva.bind("<B3-Motion>", self.move_vertice)
         self.canva.bind("<Button-2>", self.start_move)
         self.canva.bind("<B2-Motion>", self.move)
@@ -144,10 +145,6 @@ class GraphViewer():
         self.draw()
 
     def start_move_vertice(self, event):
-        self.temp_coordinates = (event.x, event.y)
-
-    def move_vertice(self, event):
-        self.canva.create_rectangle(self.temp_coordinates[0], self.temp_coordinates[1], event.x, event.y, outline="green")
         for vertice in self.vertices_coordinates:
             x = self.vertices_coordinates[vertice][0] * self.scale
             y = self.vertices_coordinates[vertice][1] * self.scale
@@ -156,10 +153,15 @@ class GraphViewer():
             ys = self.coordinates[1] + (y-self.vertice_size/2)
             ye = self.coordinates[1] + (y+self.vertice_size/2)
             if xs < event.x and xe > event.x and ys < event.y and ye > event.y and not self.vertice_moving:
-                self.vertice_moving=True
-                self.vertices_coordinates[vertice] = ((-self.coordinates[0] + event.x)/self.scale, (-self.coordinates[1] + event.y)/self.scale)
-        self.vertice_moving=False
-        self.draw()
+                self.vertice_moving = vertice
+
+    def move_vertice(self, event):
+        if self.vertice_moving:
+            self.vertices_coordinates[self.vertice_moving] = ((-self.coordinates[0] + event.x)/self.scale, (-self.coordinates[1] + event.y)/self.scale)
+            self.draw()
+    
+    def end_move_vertice(self, event):
+        self.vertice_moving = None
 
     def add_vertice(self):
         new_vertice_window = tk.Frame(self.window, relief="raised", borderwidth=2)
