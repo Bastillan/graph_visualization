@@ -5,23 +5,11 @@ set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 find_package(Boost REQUIRED)
 
-add_executable(main_app PluginManager.cpp)
-target_link_libraries(main_app PRIVATE Boost::boost)
-
-add_library(graphs_core STATIC math.cpp GraphManager.cpp)
-
-add_library(plugin_grid SHARED plugin_grid.cpp)
-target_link_libraries(plugin_grid PRIVATE Boost::boost)
-
-add_library(plugin_circular SHARED plugin_circular.cpp)
-target_link_libraries(plugin_circular PRIVATE Boost::boost)
-
+add_library(graphs_core STATIC GraphManager.cpp)
 target_link_libraries(graphs_core PRIVATE Boost::filesystem Boost::system Boost::graph)
-target_link_libraries(main_app PRIVATE Boost::filesystem Boost::system)
 
-pybind11_add_module(graphs math_py.cpp GraphManager_py.cpp)
+pybind11_add_module(graphs GraphManager_py.cpp)
 target_link_libraries(graphs PRIVATE graphs_core Boost::system Boost::graph)
-
 set_target_properties(graphs PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../python)
-set_target_properties(plugin_grid PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/app/plugins)
-set_target_properties(plugin_circular PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/app/plugins)
+
+add_subdirectory(plugins)

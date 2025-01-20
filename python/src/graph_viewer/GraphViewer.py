@@ -4,7 +4,7 @@ from graphs import *
 
 class GraphViewer():
     def __init__(self):
-        self.plugin_path="../cpp/app/plugins/libplugin.so"
+        self.plugin_path="../cpp/app/plugins/dist/libplugin_circular.so"
         self.canva_size = (1000, 700)
         self.coordinates = (100, 100)
         self.vertice_size = 60
