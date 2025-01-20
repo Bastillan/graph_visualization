@@ -1,6 +1,12 @@
 /**
  * @file plugin_grid.cpp
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (michal.pienkos.stud@pw.edu.pl)
  * @brief Plugin for grid-based graph calculations.
+ * @version 0.1
+ * @date 2025-01-20
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
 #include "plugin_interface.hpp"
@@ -20,21 +26,6 @@ namespace PluginGrid {
 class GraphCalculate : public PluginInterface::MyPluginApi {
   public:
     GraphCalculate() {}
-
-    /**
-     * @brief Returns the name of the plugin.
-     * @return Plugin name.
-     */
-    std::string name() const { return "Graph calculations"; }
-
-    /**
-     * @brief Calculates y = a * x + b.
-     * @param x Input value.
-     * @param a Slope.
-     * @param b Intercept.
-     * @return Calculated y value.
-     */
-    float y(float x, float a, float b) { return a * x + b; }
 
     /**
      * @brief Calculates grid coordinates for the graph vertices.

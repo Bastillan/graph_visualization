@@ -65,8 +65,8 @@ calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::shared_library lib(plug_path);
 
     auto create_plugin =
-        lib.get<PluginInterface::MyPluginApi*()>("create_plugin");
-    std::shared_ptr<PluginInterface::MyPluginApi> plugin(create_plugin());
+        lib.get<PluginInterface::MyPluginApi*()>("createPlugin");
+    std::shared_ptr<PluginInterface::MyPluginApi> plugin(createPlugin());
 
     auto coordinates = plugin->calculateGraphCoordinates(g);
 

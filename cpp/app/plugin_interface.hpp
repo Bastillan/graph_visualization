@@ -1,6 +1,12 @@
 /**
  * @file plugin_interface.hpp
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (michal.pienkos.stud@pw.edu.pl)
  * @brief Interface for graph calculation plugins.
+ * @version 0.1
+ * @date 2025-01-20
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
 #include <boost/config.hpp>
@@ -23,21 +29,6 @@ namespace PluginInterface {
  */
 class BOOST_SYMBOL_VISIBLE MyPluginApi {
   public:
-    /**
-     * @brief Returns the name of the plugin.
-     * @return Plugin name.
-     */
-    virtual std::string name() const = 0;
-
-    /**
-     * @brief Calculates y = a * x + b.
-     * @param x Input value.
-     * @param a Slope.
-     * @param b Intercept.
-     * @return Calculated y value.
-     */
-    virtual float y(float x, float a, float b) = 0;
-
     /**
      * @brief Calculates coordinates for the graph vertices.
      * @param graph Input graph.

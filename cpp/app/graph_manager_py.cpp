@@ -1,6 +1,12 @@
 /**
- * @file graph_manager_py.cpp
+ * @file plugin_manager.cpp
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (michal.pienkos.stud@pw.edu.pl)
  * @brief Python bindings for graph management functions.
+ * @version 0.1
+ * @date 2025-01-20
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
 #include <pybind11/pybind11.h>
