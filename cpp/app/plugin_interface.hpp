@@ -34,7 +34,7 @@ class BOOST_SYMBOL_VISIBLE MyPluginApi {
      * @param graph Input graph.
      * @return Map of vertex indices to their coordinates.
      */
-    virtual std::unordered_map<int, std::pair<double, double>>
+    virtual std::unordered_map<size_t, std::pair<double, double>>
     calculateGraphCoordinates(Graph graph) = 0;
 
     virtual ~MyPluginApi() {}

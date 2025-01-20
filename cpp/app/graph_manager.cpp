@@ -59,7 +59,7 @@ std::vector<std::pair<size_t, size_t>> getEdges(const Graph& g) {
  * @param plugin_path Path to the plugin.
  * @return Map of vertex indices to their coordinates.
  */
-std::unordered_map<int, std::pair<double, double>>
+std::unordered_map<size_t, std::pair<double, double>>
 calculateLayout(const Graph& g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
     boost::dll::shared_library lib(plug_path);

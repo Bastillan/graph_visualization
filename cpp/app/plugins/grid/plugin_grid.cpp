@@ -32,14 +32,14 @@ class GraphCalculate : public PluginInterface::MyPluginApi {
      * @param graph Input graph.
      * @return Map of vertex indices to their coordinates.
      */
-    std::unordered_map<int, std::pair<double, double>>
+    std::unordered_map<size_t, std::pair<double, double>>
     calculateGraphCoordinates(Graph graph) {
         using namespace boost;
         size_t num_vertices = boost::num_vertices(graph);
-        int size = sqrt(num_vertices) + 1;
-        std::unordered_map<int, std::pair<double, double>> coordinates;
+        size_t size = sqrt(num_vertices) + 1;
+        std::unordered_map<size_t, std::pair<double, double>> coordinates;
 
-        int i = 0;
+        size_t i = 0;
         auto [v_begin, v_end] = vertices(graph);
         for (auto v_it = v_begin; v_it != v_end; ++v_it) {
             coordinates[i] = (std::make_pair(i % size, i / size));
