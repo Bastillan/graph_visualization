@@ -29,8 +29,8 @@ class graph_calculate : public my_plugin_api {
         int i = 0;
         auto [v_begin, v_end] = vertices(graph);
         for (auto v_it = v_begin; v_it != v_end; ++v_it) {
-            coordinates[i] = (std::make_pair(cos(2 * M_PI * i / num_vertices),
-                                             sin(2 * M_PI * i / num_vertices)));
+            coordinates[i] = (std::make_pair(cos(2 * M_PI * i / num_vertices) + 1,
+                                             sin(2 * M_PI * i / num_vertices) + 1));
             ++i;
         }
 
