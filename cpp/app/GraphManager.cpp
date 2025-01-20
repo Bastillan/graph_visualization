@@ -32,6 +32,8 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
                                     VertexProperty>;
 
+namespace GraphManager {
+
 std::unordered_map<size_t, std::string> getVerticesData(const Graph &g) {
     std::unordered_map<size_t, std::string> data;
 
@@ -59,8 +61,8 @@ calculateLayout(const Graph &g, const std::string plugin_path) {
     boost::dll::fs::path plug_path = plugin_path;
     boost::dll::shared_library lib(plug_path);
 
-    auto create_plugin = lib.get<my_plugin_api *()>("create_plugin");
-    std::shared_ptr<my_plugin_api> plugin(create_plugin());
+    auto create_plugin = lib.get<PluginInterface::my_plugin_api *()>("create_plugin");
+    std::shared_ptr<PluginInterface::my_plugin_api> plugin(create_plugin());
     
     auto coordinates = plugin->calculate_graph_coordinates(g);
 
@@ -144,3 +146,5 @@ void removeEdge(Graph &g, size_t source, size_t target) {
         throw std::invalid_argument("Edge does not exist");
     }
 }
+
+} // namespace GraphManager

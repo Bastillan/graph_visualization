@@ -10,9 +10,9 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
                                     VertexProperty>;
 
-namespace my_namespace {
+namespace PluginCircular {
 
-class graph_calculate : public my_plugin_api {
+class graph_calculate : public PluginInterface::my_plugin_api {
   public:
     graph_calculate() {}
 
@@ -42,8 +42,8 @@ class graph_calculate : public my_plugin_api {
 
 // Exporting `my_namespace::plugin` variable with alias name `plugin`
 // (Has the same effect as `BOOST_DLL_ALIAS(my_namespace::plugin, plugin)`)
-extern "C" BOOST_SYMBOL_EXPORT my_plugin_api *create_plugin() {
+extern "C" BOOST_SYMBOL_EXPORT PluginInterface::my_plugin_api *create_plugin() {
     return new graph_calculate();
 }
 
-} // namespace my_namespace
+} // namespace PluginCircular

@@ -4,6 +4,7 @@
 #include "GraphManager.hpp"
 
 namespace py = pybind11;
+using namespace GraphManager;
 
 PYBIND11_MODULE(graphs, handle) {
     handle.doc() = "This is the module docs.";

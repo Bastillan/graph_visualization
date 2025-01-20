@@ -9,6 +9,8 @@ using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
                                     VertexProperty>;
 
+namespace PluginInterface {
+
 class BOOST_SYMBOL_VISIBLE my_plugin_api {
   public:
     virtual std::string name() const = 0;
@@ -17,3 +19,5 @@ class BOOST_SYMBOL_VISIBLE my_plugin_api {
     calculate_graph_coordinates(Graph graph) = 0;
     virtual ~my_plugin_api() {}
 };
+
+} // namespace PluginInterface
