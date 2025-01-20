@@ -71,8 +71,7 @@ Graph loadGraph(const std::string path) {
 
     std::ifstream file(path);
     if (!file.is_open()) {
-        std::cerr << "Nie udało się otworzyć pliku graph.graphml!" << std::endl;
-        return 1;
+        throw std::runtime_error("Failed to open the file!");
     }
 
     // Wczytaj graf z pliku GraphML
@@ -82,9 +81,7 @@ Graph loadGraph(const std::string path) {
         dp.property("name", get(boost::vertex_name, g));
         boost::read_graphml(file, g, dp);
     } catch (const std::exception& e) {
-        std::cerr << "Błąd podczas wczytywania grafu: " << e.what()
-                  << std::endl;
-        return 1;
+        throw std::runtime_error("Failed to read graph!");
     }
 
     return g;
@@ -93,8 +90,7 @@ Graph loadGraph(const std::string path) {
 bool saveGraph(Graph& g, const std::string path) {
     std::ofstream file(path);
     if (!file.is_open()) {
-        std::cerr << "Nie udało się otworzyć pliku graph.graphml!" << std::endl;
-        return false;
+        throw std::runtime_error("Failed to open the file!");
     }
 
     try {
@@ -102,9 +98,7 @@ bool saveGraph(Graph& g, const std::string path) {
         dp.property("name", get(boost::vertex_name, g));
         boost::write_graphml(file, g, dp);
     } catch (const std::exception& e) {
-        std::cerr << "Błąd podczas wczytywania grafu: " << e.what()
-                  << std::endl;
-        return false;
+        throw std::runtime_error("Failed to write graph!");
     }
     return true;
 }

@@ -35,6 +35,9 @@
     <node id="n10">
       <data key="key0">Node n10</data>
     </node>
+    <node id="n11">
+      <data key="key0">1</data>
+    </node>
     <edge id="e0" source="n0" target="n2">
     </edge>
     <edge id="e1" source="n1" target="n2">

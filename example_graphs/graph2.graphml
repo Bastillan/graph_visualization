@@ -15,10 +15,7 @@
       <data key="key0">1</data>
     </node>
     <node id="n4">
-      <data key="key0">1</data>
-    </node>
-    <node id="n5">
-      <data key="key0">1</data>
+      <data key="key0">1, 1</data>
     </node>
   </graph>
 </graphml>
