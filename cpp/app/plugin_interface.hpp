@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef PLUGIN_INTERFACE_HPP
+#define PLUGIN_INTERFACE_HPP
+
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphml.hpp>
@@ -41,3 +44,5 @@ class BOOST_SYMBOL_VISIBLE MyPluginApi {
 };
 
 } // namespace PluginInterface
+
+#endif // PLUGIN_INTERFACE_HPP
