@@ -5,10 +5,12 @@ import tkinter as tk
 from tkinter import filedialog
 from graphs import Graph, loadGraph, saveGraph, calculateLayout
 
+
 class GraphViewer:
     """!
     A class to visualize and interact with graphs using a GUI.
     """
+
     def __init__(self):
         """!
         Constructor to initialize the GraphViewer.
@@ -115,30 +117,38 @@ class GraphViewer:
         """!
         Open and load a graph from a file.
         """
-        self.graph_path = filedialog.askopenfilename(title="Choose graph")
-        self.graph = loadGraph(self.graph_path)
-        self.vertices = self.graph.getVerticesData()
-        self.vertices_coordinates = calculateLayout(
-            self.graph, self.plugin_path
-        )
-        self.edges = self.graph.getEdges()
-        self.draw()
+        try:
+            self.graph_path = filedialog.askopenfilename(title="Choose graph")
+            self.graph = loadGraph(self.graph_path)
+            self.vertices = self.graph.getVerticesData()
+            self.vertices_coordinates = calculateLayout(
+                self.graph, self.plugin_path
+            )
+            self.edges = self.graph.getEdges()
+            self.draw()
+        except:
+            self.message_label.config(text="Failed to open!", fg="red")
 
     def create_new_graph(self):
         """!
         Create a new graph and save it to a file.
         """
-        new_graph_path = filedialog.asksaveasfilename(
-            title="Enter new graph name"
-        )
-        if new_graph_path:
-            try:
-                with open(new_graph_path, "w") as file:
-                    file.write("")
-                self.graph_path = new_graph_path
-                self.message_label.config(text="Created new graph", fg="green")
-            except Exception as e:
-                print(f"Error: {e}")
+        try:
+            new_graph_path = filedialog.asksaveasfilename(
+                title="Enter new graph name"
+            )
+            if new_graph_path:
+                try:
+                    with open(new_graph_path, "w") as file:
+                        file.write("")
+                    self.graph_path = new_graph_path
+                    self.message_label.config(
+                        text="Created new graph", fg="green"
+                    )
+                except Exception as e:
+                    print(f"Error: {e}")
+        except:
+            self.message_label.config(text="Failed to open!", fg="red")
 
     def zoom_in(self):
         """!
@@ -159,7 +169,7 @@ class GraphViewer:
     def on_scroll(self, event):
         """!
         Handle mouse scroll events for zooming.
-        
+
         @param event The mouse event.
         """
         if event.delta != 0:
@@ -176,7 +186,7 @@ class GraphViewer:
     def start_move(self, event):
         """!
         Start moving the entire graph view.
-        
+
         @param event The mouse event.
         """
         self.mouse_position = (event.x, event.y)
@@ -185,7 +195,7 @@ class GraphViewer:
     def move(self, event):
         """!
         Move the entire graph view.
-        
+
         @param event The mouse event.
         """
         x_move = event.x - self.mouse_position[0]
@@ -199,7 +209,7 @@ class GraphViewer:
     def start_select(self, event):
         """!
         Start selecting vertices.
-        
+
         @param event The mouse event.
         """
         self.temp_coordinates = (event.x, event.y)
@@ -214,7 +224,7 @@ class GraphViewer:
     def select(self, event):
         """!
         Select vertices by dragging the mouse.
-        
+
         @param event The mouse event.
         """
         self.draw()
@@ -229,7 +239,7 @@ class GraphViewer:
     def end_select(self, event):
         """!
         End the selection of vertices.
-        
+
         @param event The mouse event.
         """
         self.selected_vertices = []
@@ -250,7 +260,7 @@ class GraphViewer:
     def start_move_vertice(self, event):
         """!
         Start moving a single vertice.
-        
+
         @param event The mouse event.
         """
         for vertice in self.vertices_coordinates:
@@ -272,7 +282,7 @@ class GraphViewer:
     def move_vertice(self, event):
         """!
         Move a single vertice.
-        
+
         @param event The mouse event.
         """
         if self.vertice_moving is not None:
@@ -285,7 +295,7 @@ class GraphViewer:
     def end_move_vertice(self, event):
         """!
         End moving a single vertice.
-        
+
         @param event The mouse event.
         """
         self.vertice_moving = None
@@ -460,7 +470,7 @@ class GraphViewer:
     def draw_line(self, start, end):
         """!
         Draw a line (edge) between two points.
-        
+
         @param start The starting point of the line.
         @param end The ending point of the line.
         """
@@ -476,7 +486,7 @@ class GraphViewer:
     def draw_circle(self, x, y, alternative_color=False):
         """!
         Draw a circle (vertice) at a given position.
-        
+
         @param x The x-coordinate of the circle.
         @param y The y-coordinate of the circle.
         @param alternative_color Whether to use an alternative color.
@@ -502,7 +512,7 @@ class GraphViewer:
     def write_text(self, x, y, text):
         """!
         Write text at a given position.
-        
+
         @param x The x-coordinate of the text.
         @param y The y-coordinate of the text.
         @param text The text to be displayed.
