@@ -6,7 +6,6 @@
  * @date 2025-01-20
  * 
  * @copyright Copyright (c) 2025
- * 
  */
 
 #ifndef GRAPH_H
@@ -15,16 +14,15 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graphml.hpp>
+
+namespace GraphManager {
 
 using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
 using EdgeProperty = boost::no_property;
 using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
                                     VertexProperty, EdgeProperty>;
-
-namespace GraphManager {
 
 /**
  * @brief Loads a graph from a file.

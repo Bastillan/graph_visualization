@@ -19,6 +19,8 @@
 
 namespace PluginGrid {
 
+using Graph = PluginInterface::Graph;
+
 /**
  * @class GraphCalculate
  * @brief Implements grid-based graph calculations.

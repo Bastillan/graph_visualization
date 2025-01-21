@@ -12,19 +12,15 @@
 #ifndef PLUGIN_INTERFACE_HPP
 #define PLUGIN_INTERFACE_HPP
 
+#include "graph_manager.hpp"
 #include <boost/config.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/graphml.hpp>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-using VertexProperty = boost::property<boost::vertex_name_t, std::string>;
-using EdgeProperty = boost::no_property;
-using Graph = boost::adjacency_list<boost::vecS, boost::vecS, boost::directedS,
-                                    VertexProperty, EdgeProperty>;
-
 namespace PluginInterface {
+
+using Graph = GraphManager::Graph;
 
 /**
  * @class MyPluginApi
