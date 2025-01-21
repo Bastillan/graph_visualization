@@ -8,6 +8,8 @@
  * @copyright Copyright (c) 2025
  * 
  */
+
+#include "graph_manager.hpp"
 #include "plugin_interface.hpp"
 #include <boost/dll/import.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -20,6 +22,8 @@
 #include <vector>
 
 namespace GraphManager {
+
+using Graph = PluginInterface::Graph;
 
 /**
  * @brief Gets the data of the vertices in the graph.

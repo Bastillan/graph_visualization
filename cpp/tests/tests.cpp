@@ -1,6 +1,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include "graph_manager.hpp"
 
+using Graph = GraphManager::Graph;
+
 TEST_CASE("LoadGraph test - Check edges", "[graph_manager]") {
     auto graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph1.graphml");
     auto edges = GraphManager::getEdges(graph);

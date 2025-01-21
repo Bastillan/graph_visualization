@@ -19,6 +19,8 @@
 
 namespace PluginCircular {
 
+using Graph = PluginInterface::Graph;
+
 /**
  * @class GraphCalculate
  * @brief Implements circular-based graph calculations.
