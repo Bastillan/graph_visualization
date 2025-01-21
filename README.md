@@ -11,3 +11,5 @@ Celem projektu jest stworzenie aplikacji (webowa lub desktopowa), która pozwala
 [Dokumentacja wstępna](./dokumentacja_wstepna.md)
 
 [Szkielet aplikacji](./szkielet_aplikacji.md)
+
+[Dokumentacja końcowa](./dokumentacja_koncowa.md)
