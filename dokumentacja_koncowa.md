@@ -21,15 +21,81 @@
 ### Komentarz do zakresu wykonanych prac
 Zaimplementowane zostały wszystkie z wstępnie zaplanowanych funkcjonalności, jednak nie został rozwiązany jeden podproblem - *zdefiniowanie API umożliwiającego rozszerzenie aplikacji za pomocą wtyczek implementujących obsługę dodatkowych formatów plików*. Problematyczne jest wczytywanie grafu, ponieważ trzeba założyć jakie dane (*properties*) mogą być przechowywane w wierzchołkach i krawędziach.
 
-Ze względu na ustawienie restrykcyjnych flag kompilacji, pojawił się również problem z kompilacją aplikacji w `C++` w wersji release wynikający z możliwego braku inicjacji zmiennej (iteratora krawędzi) w bibliotece `Boost`, nie znaleźliśmy sposobu, aby rozwiązać dany problem, więc przy kompilacji została ustawiona flaga `-Wno-uninitialized`.
+Ze względu na ustawienie restrykcyjnych flag kompilacji, pojawił się również problemy z kompilacją aplikacji w `C++` w wersji *Release* wynikający, jak się nam zdaje, z możliwego braku inicjacji zmiennej (iteratora krawędzi) w bibliotece `Boost`, nie znaleźliśmy sposobu, aby rozwiązać dany problem, więc przy kompilacji została ustawiona flaga `-Wno-uninitialized`.
 
-![Screen błędu](image.png)
+![Screen błędu](./images/error.png)
 
 ### Struktura projektu
-W części `C++` zostały napisane dwie wtyczki kompilowane jako biblioteki dynamiczne: *plugin_circular* i *plugin_grid*. Implementują one zdefiniowane API wyznaczając pozycje wierzchołków grafu za pomocą różnych algorytmów rozłożenia.
 
-Wtyczki te są ładowane przez bibliotekę statyczną - *graphs_core*, podczas działania programu. Umożliwia ona wczytanie i zapisanie grafu do pliku oraz jego edycję.
+![Diagram klas](./images/ZPR.drawio.png)
 
-Biblioteka ta jest udostępniana `Pythonowej` części dzięki kompilacji jako moduł `Pythonowy` ze zdefiniowanymi bindingami przy użyciu `pybind11`.
+W części `C++` zostały napisane dwie wtyczki kompilowane jako biblioteki dynamiczne: *plugin_circular* i *plugin_grid*. Implementują one zdefiniowane API (*plugin_interface*) wyznaczając pozycje wierzchołków grafu za pomocą różnych algorytmów rozłożenia.
 
-Część `Pythonowa` składa się jedynie z klasy *GraphViewer* która odpowiedzialna jest za graficzną prezentację grafów obsługiwanych za pomocą biblioteki *graphs_core*
+Wtyczki te są ładowane przez bibliotekę statyczną - *graphs_core* (powstałej poprzez kompilacje *GraphManager*), podczas działania programu. Umożliwia ona wczytanie i zapisanie grafu do pliku oraz jego edycję.
+
+Funkcjonalności tej biblioteki są udostępniane `Pythonowej` części dzięki kompilacji jako moduł `Pythonowy` ze zdefiniowanymi bindingami przy użyciu `pybind11`.
+
+Część `Pythonowa` składa się jedynie z klasy *GraphViewer* która odpowiedzialna jest za graficzną prezentację grafów obsługiwanych za pomocą biblioteki *graphs_core*.
+
+### Instrukcja
+W folderze głównym w pliku *Makefile* zostały zdefiniowane komendy umożliwiające szybkie zarządzanie projektem.
+
+#### Kompilacja części `C++`
+- tryb *Release*
+    ```
+    make compile
+    ```
+- tryb *Debug*
+    ```
+    make compile_debug
+    ```
+
+#### Instalacja potrzebnych bibliotek dla części `Python`
+```
+make py_setup
+```
+
+#### Uruchomienie aplikacji
+```
+make run
+```
+
+#### Generowanie dokumentacji
+```
+make doxy
+```
+
+#### Uruchomienie testów jednostkowych
+```
+make compile_debug
+make test
+```
+
+#### Formatowanie kodu `C++`
+```
+make format_cpp
+```
+
+#### Formatowanie kodu `Python`
+```
+make format_py
+```
+
+#### Lintowanie kodu `Python`
+```
+make lint_py
+```
+
+#### Lintowanie kodu `C++`
+Zostało to zintegrowane z procesem kompilacji za pomocą CMake'a.
+
+
+### Pokaz
+
+
+
+### Testy
+- 34 testy jednostkowe części `C++`
+![Testy](./images/testy.png)
+
+- Część GUI w `Pythonie` była testowana ręcznie
