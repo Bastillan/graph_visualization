@@ -329,3 +329,117 @@ TEST_CASE("LoadGraph test - Check edge between nodes 0 and 2 for graph2", "[grap
 
     CHECK(edgeFound);
 }
+
+TEST_CASE("LoadGraph test - adding nodes and edges to graph", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::addNode(graph, "n0");
+    GraphManager::addNode(graph, "n1");
+    GraphManager::addNode(graph, "n2");
+    GraphManager::addEdge(graph, 1, 2);
+    auto edges = GraphManager::getEdges(graph);
+
+    CHECK(edges.at(0).first == 1);
+    CHECK(edges.at(0).second == 2);
+}
+
+TEST_CASE("LoadGraph test - saving graph", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::addNode(graph, "n0");
+    GraphManager::addNode(graph, "n1");
+    GraphManager::addNode(graph, "n2");
+    GraphManager::addEdge(graph, 1, 2);
+    GraphManager::saveGraph(graph, "./../../../tests/test_graphs/graph_test.graphml");
+    auto new_graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph_test.graphml");
+    auto edges = GraphManager::getEdges(new_graph);
+    auto nodes = GraphManager::getVerticesData(new_graph);
+    
+    CHECK(edges.at(0).first == 1);
+    CHECK(edges.at(0).second == 2);
+    CHECK(nodes[0] == "n0");
+}
+
+TEST_CASE("LoadGraph test - saving and loading a graph with multiple edges", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::addNode(graph, "n0");
+    GraphManager::addNode(graph, "n1");
+    GraphManager::addNode(graph, "n2");
+    GraphManager::addEdge(graph, 0, 1);
+    GraphManager::addEdge(graph, 1, 2);
+    GraphManager::saveGraph(graph, "./../../../tests/test_graphs/graph_test_2.graphml");
+    auto new_graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph_test_2.graphml");
+    auto edges = GraphManager::getEdges(new_graph);
+    auto nodes = GraphManager::getVerticesData(new_graph);
+    
+    CHECK(edges.at(0).first == 0);
+    CHECK(edges.at(0).second == 1);
+    CHECK(edges.at(1).first == 1);
+    CHECK(edges.at(1).second == 2);
+    CHECK(nodes[0] == "n0");
+}
+
+TEST_CASE("LoadGraph test - saving and loading graph with disconnected node", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::addNode(graph, "n0");
+    GraphManager::addNode(graph, "n1");
+    GraphManager::addNode(graph, "n2");
+    GraphManager::addEdge(graph, 0, 1);
+    GraphManager::saveGraph(graph, "./../../../tests/test_graphs/graph_test_3.graphml");
+    auto new_graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph_test_3.graphml");
+    auto edges = GraphManager::getEdges(new_graph);
+    auto nodes = GraphManager::getVerticesData(new_graph);
+    
+    CHECK(edges.size() == 1);
+    CHECK(edges.at(0).first == 0);
+    CHECK(edges.at(0).second == 1);
+    CHECK(nodes[2] == "n2");
+}
+
+TEST_CASE("LoadGraph test - saving and loading an empty graph", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::saveGraph(graph, "./../../../tests/test_graphs/graph_test_4.graphml");
+    auto new_graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph_test_4.graphml");
+    auto edges = GraphManager::getEdges(new_graph);
+    auto nodes = GraphManager::getVerticesData(new_graph);
+    
+    CHECK(edges.size() == 0);
+    CHECK(nodes.size() == 0);
+}
+
+TEST_CASE("LoadGraph test - saving and loading graph with one node and self-loop", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::addNode(graph, "n0");
+    GraphManager::addEdge(graph, 0, 0);
+    GraphManager::saveGraph(graph, "./../../../tests/test_graphs/graph_test_5.graphml");
+    auto new_graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph_test_5.graphml");
+    auto edges = GraphManager::getEdges(new_graph);
+    auto nodes = GraphManager::getVerticesData(new_graph);
+    
+    CHECK(edges.size() == 1);
+    CHECK(edges.at(0).first == 0);
+    CHECK(edges.at(0).second == 0);
+    CHECK(nodes[0] == "n0");
+}
+
+TEST_CASE("LoadGraph test - saving and loading graph with multiple nodes and edges", "[graph_manager]") {
+    auto graph = Graph();
+    GraphManager::addNode(graph, "n0");
+    GraphManager::addNode(graph, "n1");
+    GraphManager::addNode(graph, "n2");
+    GraphManager::addNode(graph, "n3");
+    GraphManager::addEdge(graph, 0, 1);
+    GraphManager::addEdge(graph, 1, 2);
+    GraphManager::addEdge(graph, 2, 3);
+    GraphManager::saveGraph(graph, "./../../../tests/test_graphs/graph_test_6.graphml");
+    auto new_graph = GraphManager::loadGraph("./../../../tests/test_graphs/graph_test_6.graphml");
+    auto edges = GraphManager::getEdges(new_graph);
+    auto nodes = GraphManager::getVerticesData(new_graph);
+    
+    CHECK(edges.size() == 3);
+    CHECK(edges.at(0).first == 0);
+    CHECK(edges.at(0).second == 1);
+    CHECK(edges.at(1).first == 1);
+    CHECK(edges.at(1).second == 2);
+    CHECK(edges.at(2).first == 2);
+    CHECK(edges.at(2).second == 3);
+    CHECK(nodes[3] == "n3");
+}
