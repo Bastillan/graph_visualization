@@ -110,7 +110,7 @@ Została ona zintegrowana z procesem kompilacji za pomocą CMake'a.
 
 
 ### Testy
-- 34 testy jednostkowe części `C++`
-![Testy](./images/testy.png)
+- 36 testów jednostkowych części `C++`
+![Testy](./images/tests.png)
 
 - Część GUI w `Pythonie` była testowana ręcznie
