@@ -21,7 +21,9 @@
 ### Komentarz do zakresu wykonanych prac
 Zaimplementowane zostały wszystkie z wstępnie zaplanowanych funkcjonalności, jednak nie został rozwiązany jeden podproblem - *zdefiniowanie API umożliwiającego rozszerzenie aplikacji za pomocą wtyczek implementujących obsługę dodatkowych formatów plików*. Problematyczne jest wczytywanie grafu, ponieważ trzeba założyć jakie dane (*properties*) mogą być przechowywane w wierzchołkach i krawędziach.
 
-Ze względu na ustawienie restrykcyjnych flag kompilacji, pojawił się również problemy z kompilacją aplikacji w `C++` w wersji *Release* wynikający, jak się nam zdaje, z możliwego braku inicjacji zmiennej (iteratora krawędzi) w bibliotece `Boost`, nie znaleźliśmy sposobu, aby rozwiązać dany problem, więc przy kompilacji została ustawiona flaga `-Wno-uninitialized`.
+Na tę część zabrakło nam czasu, a doszliśmy do wniosku, że nie jest ona kluczowa dla naszej aplikacji. Dodatkowo wybrany przez nas format grafu jest jednym z popularniejszych. Ponadto przy implementacji tej części natrafiliśmy na problem, z którym nie udało nam się uporać.
+
+Ze względu na ustawienie restrykcyjnych flag kompilacji, pojawił się problem z kompilacją w wersji *Release* części aplikacji napisanej w `C++` wynikający, jak przypuszczamy, z możliwego braku inicjacji zmiennej (iteratora krawędzi) w bibliotece `Boost`, nie znaleźliśmy sposobu, aby rozwiązać dany problem, więc przy kompilacji została ustawiona flaga `-Wno-uninitialized`.
 
 ![Screen błędu](./images/error.png)
 
@@ -31,7 +33,7 @@ Ze względu na ustawienie restrykcyjnych flag kompilacji, pojawił się równie�
 
 W części `C++` zostały napisane dwie wtyczki kompilowane jako biblioteki dynamiczne: *plugin_circular* i *plugin_grid*. Implementują one zdefiniowane API (*plugin_interface*) wyznaczając pozycje wierzchołków grafu za pomocą różnych algorytmów rozłożenia.
 
-Wtyczki te są ładowane przez bibliotekę statyczną - *graphs_core* (powstałej poprzez kompilacje *GraphManager*), podczas działania programu. Umożliwia ona wczytanie i zapisanie grafu do pliku oraz jego edycję.
+Wtyczki te są ładowane przez bibliotekę statyczną - *graphs_core* (powstałą poprzez kompilacje *GraphManager*), podczas działania programu. Umożliwia ona wczytanie i zapisanie grafu do pliku oraz edycję grafu.
 
 Funkcjonalności tej biblioteki są udostępniane `Pythonowej` części dzięki kompilacji jako moduł `Pythonowy` ze zdefiniowanymi bindingami przy użyciu `pybind11`.
 
@@ -71,27 +73,40 @@ make compile_debug
 make test
 ```
 
-#### Formatowanie kodu `C++`
+#### Formatowanie kodu `C++` (za pomocą *clang-format*)
 ```
 make format_cpp
 ```
 
-#### Formatowanie kodu `Python`
+#### Formatowanie kodu `Python` (za pomocą *black*)
 ```
 make format_py
 ```
 
-#### Lintowanie kodu `Python`
+#### Statyczna analiza kodu `Python` (za pomocą *flake8*)
 ```
 make lint_py
 ```
 
-#### Lintowanie kodu `C++`
-Zostało to zintegrowane z procesem kompilacji za pomocą CMake'a.
+#### Statyczna analiza kodu kodu `C++` (za pomocą *clang-tidy*)
+Została ona zintegrowana z procesem kompilacji za pomocą CMake'a.
 
 
-### Pokaz
+### Prezentacja
+#### Załadowany graf
 
+![Graf](./images/graph_circular.png)
+
+#### Modyfikacja grafu
+- Ręczne przesuwanie wierzchołków
+- Grupowanie wierzchołków
+- Przybliżanie
+
+![Modyfikacja](./images/moved_and_union.png)
+
+#### Zaznaczenie wierzchołków
+
+![Zaznaczenie](./images/selected.png)
 
 
 ### Testy
