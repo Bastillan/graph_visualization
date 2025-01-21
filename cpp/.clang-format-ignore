@@ -1,0 +1,8 @@
+# Ignore build directories
+build/
+
+# Ignore Python cache
+__pycache__/
+# Ignore other generated files
+docs/
+example_graphs/

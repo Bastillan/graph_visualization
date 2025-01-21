@@ -1,23 +1,17 @@
-project(calculations)
+project(graphs)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(PYBIND_FINDPYTHON ON)
+set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 find_package(Boost REQUIRED)
 
-add_executable(main_app PluginManager.cpp)
-target_link_libraries(main_app PRIVATE Boost::boost)
+set(CMAKE_CXX_CLANG_TIDY)
 
-add_library(calculations_core STATIC math.cpp)
+add_library(graphs_core STATIC graph_manager.cpp)
+target_link_libraries(graphs_core PRIVATE Boost::filesystem Boost::system Boost::graph)
 
-add_library(plugin SHARED plugin.cpp)
-target_link_libraries(plugin PRIVATE Boost::boost)
+pybind11_add_module(graphs graph_manager_py.cpp)
+target_link_libraries(graphs PRIVATE graphs_core Boost::system Boost::graph)
+set_target_properties(graphs PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../python)
 
-target_link_libraries(calculations_core PRIVATE Boost::filesystem Boost::system)
-target_link_libraries(main_app PRIVATE Boost::filesystem Boost::system)
-
-pybind11_add_module(calculations math_py.cpp)
-target_link_libraries(calculations PRIVATE calculations_core)
-
-set_target_properties(calculations PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../python)
-set_target_properties(plugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/app/plugins)
+add_subdirectory(plugins)
