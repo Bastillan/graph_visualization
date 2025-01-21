@@ -1,5 +1,7 @@
-## @file GraphViewer.py
-# @brief A class to visualize and interact with graphs using a GUI.
+"""!
+@file GraphViewer.py
+@brief A class to visualize and interact with graphs using a GUI.
+"""
 
 import tkinter as tk
 from tkinter import filedialog
@@ -126,8 +128,9 @@ class GraphViewer:
             )
             self.edges = self.graph.getEdges()
             self.draw()
-        except:
+        except Exception as e:
             self.message_label.config(text="Failed to open!", fg="red")
+            print(f"Exception: {e}")
 
     def create_new_graph(self):
         """!
@@ -147,8 +150,9 @@ class GraphViewer:
                     )
                 except Exception as e:
                     print(f"Error: {e}")
-        except:
+        except Exception as e:
             self.message_label.config(text="Failed to open!", fg="red")
+            print(f"Exception: {e}")
 
     def zoom_in(self):
         """!

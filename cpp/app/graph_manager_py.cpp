@@ -1,12 +1,13 @@
 /**
  * @file plugin_manager_py.cpp
- * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier (jedrzej.kedzierski.stud@pw.edu.pl)
+ * @author mpienkos (michal.pienkos.stud@pw.edu.pl) jkedzier
+ * (jedrzej.kedzierski.stud@pw.edu.pl)
  * @brief Python bindings for graph management functions.
  * @version 0.1
  * @date 2025-01-20
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 
 #include <pybind11/pybind11.h>
