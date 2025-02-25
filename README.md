@@ -2,7 +2,9 @@
 ## Description
 Graph visualization app written in `C++` and `Python`.
 
-The app can be extended with user plugins that implement different graph layout algorithms.
+It supports GraphML format.
+
+The app can be extended with user plugins that implement additional graph layout algorithms.
 
 It was written in the fifth semester (2024Z) as a project for the course *Advanced programming in C++ (ZPR)* at the Warsaw University of Technology.
 
