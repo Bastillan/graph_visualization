@@ -51,7 +51,7 @@ You can model your plugin *CMakeLists.txt* file on the ones provided with defaul
 ```cmake
 project(*your_plugin_name*)
 
-add_library(*your_plugin_name* SHARED *your_plugin.cpp*)
+add_library(*your_plugin_name* SHARED *your_plugin_name.cpp*)
 target_link_libraries(*your_plugin_name* PRIVATE Boost::boost)
 set_target_properties(*your_plugin_name* PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/app/plugins/dist)
 ```
